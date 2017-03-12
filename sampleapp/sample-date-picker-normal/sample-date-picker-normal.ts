@@ -13,6 +13,7 @@ export class SampleDatePickerNormal implements OnInit {
 
     private myDatePickerNormalOptions: IMyOptions = {
         dayLabels: {su: 'S', mo: 'M', tu: 'T', we: 'W', th: 'T', fr: 'F', sa: 'S'},
+        monthLabels: { 1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December' },
         todayBtnTxt: 'Today',
         dateFormat: 'dd/mm/yyyy',
         firstDayOfWeek: 'mo',
@@ -24,7 +25,7 @@ export class SampleDatePickerNormal implements OnInit {
         alignSelectorRight: false,
         openSelectorTopOfInput: false,
         indicateInvalidDate: true,
-        editableMonthAndYear: true,
+        editableMonthAndYear: false,
         minYear: 1900,
         maxYear: 2200,
         componentDisabled: false,
@@ -33,7 +34,7 @@ export class SampleDatePickerNormal implements OnInit {
         showSelectorArrow: false,
         showInputField: true,
         openSelectorOnInputClick: false,
-        disableHeaderButtons: true,
+        disableHeaderButtons: false,
         inputAutoFill: true,
         showWeekNumbers: false
     };

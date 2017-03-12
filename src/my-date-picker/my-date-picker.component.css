@@ -199,18 +199,6 @@
     line-height: 0;
 }
 
-.mydp .header td:nth-child(1) {
-    padding-left: 4px;
-}
-
-.mydp .header td:nth-child(2) {
-    text-align: center;
-}
-
-.mydp .header td:nth-child(3) {
-    padding-right: 4px;
-}
-
 .mydp .caltable {
     table-layout: fixed;
     /*width: 100%;*/
@@ -317,12 +305,13 @@
 
 .mydp .currmonth {
     background-color: #FFF;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .mydp .currday {
     /*text-decoration: underline;*/
     color: #3f51b5;
+    font-weight: 600;
 }
 
 .mydp .selectedday div {    
@@ -335,20 +324,24 @@
 }
 
 .mydp .headerbtncell {
-    background-color: #FAFAFA;
-    display: table-cell;
-    vertical-align: middle;
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    padding: 12px;
+    outline: none;
+    border: 0;
+    cursor: pointer;
+    background: transparent;
+    box-sizing: border-box;
 }
 
 .mydp .headerbtn,
 .mydp .headerlabelbtn {
-    background: #FAFAFA;
+    display: flex;
+    background-color: #fff;
     border: none;
-    height: 22px;
-}
-
-.mydp .headerbtn {
-    width: 16px;
+    height: 100%;
+    width: 100%;
 }
 
 .mydp .headerlabelbtn {
@@ -388,15 +381,18 @@
 
 .mydp .headermonthtxt,
 .mydp .headeryeartxt {
-    text-align: center;
-    display: table-cell;
-    vertical-align: middle;
+    display: flex;
+    justify-content: space-between;
     font-size: 14px;
-    height: 26px;
-    width: 40px;
-    max-width: 40px;
-    overflow: hidden;
-    white-space: nowrap;
+    font-weight: 700;
+    text-align: center;
+    line-height: 48px;
+}
+
+.mydp .headermonthtxt .headerlabelbtn {
+    height: 100%;
+    font-size: 14px;
+    font-weight: 700;
 }
 
 /*.mydp .btnclear:focus,
@@ -412,9 +408,14 @@
     outline: none;
 }
 
-.mydp .daycell:not(.daycellweeknbr) div:focus,
+.mydp .daycell:not(.daycellweeknbr):focus {
+    outline: none;
+}
+
+.mydp .daycell:not(.daycellweeknbr) div.focus,
+.mydp .daycell:not(.daycellweeknbr):focus div,
 .mydp .daycell:not(.daycellweeknbr) div:hover {
-    background: #e0e0e0;
+    background: #e0e0e0;    
 }
 
 .mydp .icon-calendar,
@@ -519,6 +520,23 @@
 .mydp .infopanel button.yearbtn {
     font-size: 16px;    
 }
+
+.mydp .month-selector {
+  background-color: #fff;
+  padding: 0;
+}
+
+.mydp .month-selector > div {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 48px;
+    background: none;
+}
+
+
 
 /**
  * Applies styles for users in high contrast mode. Note that this only applies
