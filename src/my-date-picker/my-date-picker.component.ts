@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ElementRef, ViewEncapsulation, Renderer, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { IMyDate, IMyDateRange, IMyMonth, IMyCalendarDay, IMyWeek, IMyDayLabels, IMyMonthLabels, IMyOptions, IMyDateModel, IMyInputAutoFill, IMyInputFieldChanged, IMyCalendarViewChanged } from "./interfaces/index";
+import { IMyDate, IMyDateRange, IMyMonth, IMyCalendarDay, IMyWeek, IMyDayLabels, IMyMonthLabels, IMyOptions, IMyDateModel, IMyInputAutoFill, IMyInputFieldChanged, IMyCalendarViewChanged, IMyInfoPanelDay } from "./interfaces/index";
 import { LocaleService } from "./services/my-date-picker.locale.service";
 import { UtilService } from "./services/my-date-picker.util.service";
 
@@ -69,15 +69,18 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     MIN_YEAR: number = 1000;
     MAX_YEAR: number = 9999;
 
+    // Custom properties for display datetime panel of Material Design
+    infoPanelDay: IMyInfoPanelDay = this.utilService.getInfoPanelDay(this.getToday());
+
     // Default options
     opts: IMyOptions = {
-        dayLabels: <IMyDayLabels> {},
-        monthLabels: <IMyMonthLabels> {},
-        dateFormat: <string> "",
+        dayLabels: <IMyDayLabels> {su: 'S', mo: 'M', tu: 'T', we: 'W', th: 'T', fr: 'F', sa: 'S'},
+        monthLabels: <IMyMonthLabels> { 1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December' },
+        dateFormat: <string> "dd/mm/yyyy",
         showTodayBtn: <boolean> true,
-        todayBtnTxt: <string> "",
-        firstDayOfWeek: <string> "",
-        sunHighlight: <boolean> true,
+        todayBtnTxt: <string> "Today",
+        firstDayOfWeek: <string> "mo",
+        sunHighlight: <boolean> false,
         markCurrentDay: <boolean> true,
         disableUntil: <IMyDate> {year: 0, month: 0, day: 0},
         disableSince: <IMyDate> {year: 0, month: 0, day: 0},
@@ -95,13 +98,13 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         openSelectorTopOfInput: <boolean> false,
         indicateInvalidDate: <boolean> true,
         editableDateField: <boolean> true,
-        editableMonthAndYear: <boolean> true,
+        editableMonthAndYear: <boolean> false,
         disableHeaderButtons: <boolean> true,
         minYear: <number> this.MIN_YEAR,
         maxYear: <number> this.MAX_YEAR,
         componentDisabled: <boolean> false,
         inputValueRequired: <boolean> false,
-        showSelectorArrow: <boolean> true,
+        showSelectorArrow: <boolean> false,
         showInputField: <boolean> true,
         openSelectorOnInputClick: <boolean> false,
         inputAutoFill: <boolean> true,
@@ -356,6 +359,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     }
 
     openBtnClicked(): void {
+        this.infoPanelDay = (this.selectionDayTxt) ? this.utilService.getInfoPanelDay(this.selectedDate) : this.utilService.getInfoPanelDay(this.getToday());
         // Open selector button clicked
         this.showSelector = !this.showSelector;
         if (this.showSelector) {

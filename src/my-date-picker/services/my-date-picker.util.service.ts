@@ -3,6 +3,7 @@ import { IMyDate } from "../interfaces/my-date.interface";
 import { IMyDateRange } from "../interfaces/my-date-range.interface";
 import { IMyMonth } from "../interfaces/my-month.interface";
 import { IMyMonthLabels } from "../interfaces/my-month-labels.interface";
+import { IMyInfoPanelDay } from "../interfaces/my-infopanel-day.interface";
 
 @Injectable()
 export class UtilService {
@@ -165,5 +166,19 @@ export class UtilService {
     getDayNumber(date: IMyDate): number {
         let d: Date = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
         return d.getDay();
+    }
+
+    getInfoPanelDay(date: IMyDate): IMyInfoPanelDay {
+        let d: Date = new Date(date.year, date.month - 1, date.day, 0, 0, 0, 0);
+        let weekday: string[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        let months: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let infoPanelDay: IMyInfoPanelDay = {
+            day: date.day,
+            month: date.month,
+            year: date.year,
+            weekDay: weekday[d.getDay()],
+            monthText: months[date.month - 1]
+        };
+        return infoPanelDay;
     }
 }
