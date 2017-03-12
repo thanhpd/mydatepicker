@@ -10,7 +10,7 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: 0;
     margin: 0;
 }
@@ -19,16 +19,16 @@
     margin-top: 2px;
     margin-left: -1px;
     position: absolute;
-    width: 252px;
-    padding: 0;
-    border: 1px solid #CCC;
+    width: 330px;
+    padding: 0;    
     border-radius: 2px;
     z-index: 100;
     animation: selectorfadein 0.1s;
+    box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
+    background-color: #fff;
 }
 
-.mydp .selector:focus {
-    border: 1px solid #ADD8E6;
+.mydp .selector:focus {    
     outline: none;
 }
 
@@ -43,7 +43,7 @@
 
 .mydp .selectorarrow {
     background: #FAFAFA;
-    margin-top: 12px;
+    
     padding: 0;
 }
 
@@ -109,10 +109,21 @@
     text-align: center;
 }
 
-.mydp .invaliddate,
 .mydp .invalidmonth,
 .mydp .invalidyear {
     background-color: #F1DEDE;
+}
+
+.mydp .invaliddate .md-input-placeholder {
+    color: red;
+}
+
+.mydp .invaliddate .md-input-underline {
+    border-color: red;
+}
+
+.mydp .invaliddate .md-input-underline .md-input-ripple {
+    background-color: red;
 }
 
 .mydp ::-ms-clear {
@@ -120,28 +131,36 @@
 }
 
 .mydp .selbtngroup {
-    position: relative;
+    /*position: relative;
     vertical-align: middle;
     white-space: nowrap;
     width: 1%;
     display: table-cell;
-    font-size: 0;
+    font-size: 0;*/
+    position: absolute;
+    right: 0;
+    top: 3px;
 }
 
 .mydp .btnpicker,
-.mydp .btnclear {
-    height: 100%;
-    width: 30px;
+.mydp .btnclear {    
     border: none;
     padding: 0;
     outline: 0;
     font: inherit;
     -moz-user-select: none;
+    background: none;
+    box-shadow: none;
 }
 
-.mydp .btnleftborder {
-    border-left: 1px solid #CCC;
+.mydp .btnpicker:active,
+.mydp .btnclear:active {
+  box-shadow: none;
 }
+
+/*.mydp .btnleftborder {
+    border-left: 1px solid #CCC;
+}*/
 
 .mydp .btnpickerenabled,
 .mydp .btnclearenabled,
@@ -161,16 +180,17 @@
     opacity: 0.4;
 }
 
-.mydp .btnpicker,
+/*.mydp .btnpicker,
 .mydp .btnclear,
 .mydp .headertodaybtn {
     background: #FFF;
-}
+}*/
 
 .mydp .header {
     width: 100%;
     height: 30px;
     background-color: #FAFAFA;
+    margin: 0 auto;
 }
 
 .mydp .header td {
@@ -193,33 +213,36 @@
 
 .mydp .caltable {
     table-layout: fixed;
-    width: 100%;
+    /*width: 100%;*/
     background-color: #FFF;
     font-size: 14px;
+    margin: 0 auto 24px auto;
 }
 
 .mydp .caltable,
-.mydp .weekdaytitle,
 .mydp .daycell {
     border-collapse: collapse;
-    color: #003366;
+    color: rgba(0, 0, 0, 0.87);
     line-height: 1.1;
 }
 
-.mydp .weekdaytitle,
-.mydp .daycell {
-    padding: 5px;
-    text-align: center;
-}
-
 .mydp .weekdaytitle {
-    background-color: #DDD;
+    border-collapse: collapse;
+    color: rgba(0, 0, 0, 0.54);
+    line-height: 1.1;
+    background-color: #FFF;
     font-size: 12px;
     font-weight: bold;
-    vertical-align: middle;
-    max-width: 36px;
+    vertical-align: middle;    
     overflow: hidden;
     white-space: nowrap;
+    width: 40px;
+    height: 40px;
+}
+
+.mydp .weekdaytitle,
+.mydp .daycell {    
+    text-align: center;
 }
 
 .mydp .weekdaytitleweeknbr {
@@ -228,13 +251,30 @@
 }
 
 .mydp .daycell {
-    cursor: pointer;
-    height: 30px;
+    cursor: pointer;    
+    width: 44px;
+    height: 40px;
+    padding: 0 2px;
+    border-radius: 50%;
+}
+
+.mydp .caltable tr .daycell:first-child {
+    padding-left: 0;
+}
+
+.mydp .caltable tr .daycell:last-child {
+    padding-right: 0;
 }
 
 .mydp .daycell div {
     background-color: inherit;
-    vertical-align: middle;
+    vertical-align: middle;    
+    text-align: center;    
+    line-height: 40px;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    border-radius: 50%;
 }
 
 .mydp .daycell div span {
@@ -276,18 +316,22 @@
 }
 
 .mydp .currmonth {
-    background-color: #F6F6F6;
-    font-weight: bold;
+    background-color: #FFF;
+    font-weight: 600;
 }
 
 .mydp .currday {
-    text-decoration: underline;
+    /*text-decoration: underline;*/
+    color: #3f51b5;
 }
 
-.mydp .selectedday div {
-    border: 1px solid #004198;
-    background-color: #8EBFFF !important;
-    border-radius: 2px;
+.mydp .selectedday div {    
+    background-color: #3f51b5 !important;
+    color: #fff;
+}
+
+.mydp .selectedday div .currday {
+    color: #fff;
 }
 
 .mydp .headerbtncell {
@@ -355,11 +399,11 @@
     white-space: nowrap;
 }
 
-.mydp .btnclear:focus,
+/*.mydp .btnclear:focus,
 .mydp .btnpicker:focus,
 .mydp .headertodaybtn:focus {
     background: #ADD8E6;
-}
+}*/
 
 .mydp .headerbtn:focus,
 .mydp .monthlabel:focus,
@@ -368,8 +412,9 @@
     outline: none;
 }
 
-.mydp .daycell:focus {
-    outline: 1px solid #CCC;
+.mydp .daycell:not(.daycellweeknbr) div:focus,
+.mydp .daycell:not(.daycellweeknbr) div:hover {
+    background: #e0e0e0;
 }
 
 .mydp .icon-calendar,
@@ -397,13 +442,13 @@
 .mydp td {
     border: none;
 }
-
+/*
 .mydp .btnpickerenabled:hover,
 .mydp .btnclearenabled:hover,
 .mydp .headertodaybtnenabled:hover,
 .mydp .tablesingleday:hover {
     background-color: #8BDAF4;
-}
+}*/
 
 .mydp .monthlabel,
 .mydp .yearlabel {
@@ -457,6 +502,22 @@
 
 .mydp .icon-cross:before {
     content: "\e805";
+}
+
+.mydp .infopanel {
+    background-color: #3f51b5;
+    color: rgba(255, 255, 255, 0.87);
+    padding: 22px 24px 0 24px;
+}
+
+.mydp .infopanel button {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.mydp .infopanel button.yearbtn {
+    font-size: 16px;    
 }
 
 /**

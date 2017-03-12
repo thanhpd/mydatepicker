@@ -12,10 +12,11 @@ const normalSampleTpl: string = require('./sample-date-picker-normal.html');
 export class SampleDatePickerNormal implements OnInit {
 
     private myDatePickerNormalOptions: IMyOptions = {
+        dayLabels: {su: 'S', mo: 'M', tu: 'T', we: 'W', th: 'T', fr: 'F', sa: 'S'},
         todayBtnTxt: 'Today',
-        dateFormat: 'dd.mm.yyyy',
+        dateFormat: 'dd/mm/yyyy',
         firstDayOfWeek: 'mo',
-        sunHighlight: true,
+        sunHighlight: false,
         markCurrentDay: true,
         height: '34px',
         width: '210px',
@@ -29,7 +30,7 @@ export class SampleDatePickerNormal implements OnInit {
         componentDisabled: false,
         inputValueRequired: false,
         showClearDateBtn: true,
-        showSelectorArrow: true,
+        showSelectorArrow: false,
         showInputField: true,
         openSelectorOnInputClick: false,
         disableHeaderButtons: true,
@@ -59,7 +60,7 @@ export class SampleDatePickerNormal implements OnInit {
     onEditableDateField(checked: boolean) {
         let copy = this.getCopyOfOptions();
         copy.editableDateField = checked;
-        copy.openSelectorOnInputClick = !checked;
+        // copy.openSelectorOnInputClick = !checked;
         this.myDatePickerNormalOptions = copy;
     }
 
