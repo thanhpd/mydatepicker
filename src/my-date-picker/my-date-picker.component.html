@@ -29,7 +29,7 @@
             </tr>
         </table>
         <div class="selector-content">
-            <div class="datepicker">
+            <div class="datepicker" [class.active]="!isYearViewVisible">
                 <table style="width: 100%;">
                     <tr>
             <tr>
@@ -66,7 +66,7 @@
                                 <div class="headermonthtxt">
                                     <!--<input type="text" *ngIf="editMonth" class="monthinput" maxlength="10" [mydpfocus]="2" [value]="visibleMonth.monthTxt" (keyup)="userMonthInput($event)" (click)="$event.stopPropagation()" [ngClass]="{'invalidmonth': invalidMonth}">-->
                                     <!--<button class="headerlabelbtn" type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="opts.editableMonthAndYear&&editMonthClicked($event)" tabindex="{{opts.editableMonthAndYear?'0':'-1'}}">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>-->
-                                    <button md-button type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="opts.editableMonthAndYear&&editMonthClicked($event)"
+                                    <button md-button type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="openSelectYearMonth($event)"
                                         tabindex="{{opts.editableMonthAndYear?'0':'-1'}}" class="month-year-button">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>
                                 </div>
                                 <div class="headerbtncell">
@@ -108,6 +108,20 @@
                             </td>
                         </tr>
                     </tbody>
+                </table>
+            </div>
+            <div class="yearpicker" [class.active]="isYearViewVisible">
+                <table>
+                    <tbody role="rowgroup" class="year-row">
+                        <tr *ngFor="let item of [1, 2]">
+                            <td class="year-row-label">{{item == 1 ? item : ''}}</td>
+                            <td *ngFor="let x of [1, 2, 3, 4, 5, 6]">{{item == 1 ? x : 6 + x}}</td>
+                        </tr>
+                    </tbody>
+                    <tr>
+                        <button md-button type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="openSelectYearMonth($event)"
+                                        tabindex="{{opts.editableMonthAndYear?'0':'-1'}}" class="month-year-button">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>
+                    </tr>
                 </table>
             </div>
         </div>
