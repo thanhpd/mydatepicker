@@ -1,29 +1,31 @@
-<div class="mydp" [ngStyle]="{'width': getComponentWidth(), 'border': opts.inline ? 'none' : null}">    
+<div class="mydp" [ngStyle]="{'width': getComponentWidth(), 'border': opts.inline ? 'none' : null}">
     <div class="selectiongroup" *ngIf="!opts.inline">
         <md-input-container *ngIf="opts.showInputField" [ngClass]="{'invaliddate': invalidDate&&opts.indicateInvalidDate}">
             <input md-input ngtype="text" class="selection" [attr.aria-label]="opts.ariaLabelInputField" [attr.maxlength]="opts.dateFormat.length" placeholder="{{placeholder}}"
-            [myinputautofill]="autoFillOpts" [ngStyle]="{'padding-right': selectionDayTxt.length>0&&opts.showClearDateBtn ? '60px' : '30px'}"
-            (keyup)="userDateInput($event)" [(ngModel)]="selectionDayTxt" (blur)="lostFocusInput($event)" [disabled]="opts.componentDisabled" [readonly]="!opts.editableDateField" [required]="opts.inputValueRequired" (click)="handleInputClick($event)">
-        </md-input-container>        
+                [myinputautofill]="autoFillOpts" [ngStyle]="{'padding-right': selectionDayTxt.length>0&&opts.showClearDateBtn ? '60px' : '30px'}"
+                (keyup)="userDateInput($event)" [(ngModel)]="selectionDayTxt" (blur)="lostFocusInput($event)" [disabled]="opts.componentDisabled"
+                [readonly]="!opts.editableDateField" [required]="opts.inputValueRequired" (click)="handleInputClick($event)">
+        </md-input-container>
         <div class="selbtngroup" [style.height]="opts.height">
             <button md-mini-fab type="button" [attr.aria-label]="opts.ariaLabelClearDate" class="btnclear" *ngIf="selectionDayTxt.length>0&&opts.showClearDateBtn" (click)="removeBtnClicked()" [ngClass]="{'btnclearenabled': !opts.componentDisabled, 'btncleardisabled': opts.componentDisabled, 'btnleftborder': opts.showInputField}" [disabled]="opts.componentDisabled">
                 <span class="mydpicon icon-cross" [ngStyle]="{'line-height': opts.height}"></span>
+                [disabled]="opts.componentDisabled">
             </button>
             <button md-mini-fab type="button" [attr.aria-label]="opts.ariaLabelOpenCalendar" class="btnpicker" (click)="openBtnClicked()" [ngClass]="{'btnpickerenabled': !opts.componentDisabled, 'btnpickerdisabled': opts.componentDisabled, 'btnleftborder': opts.showInputField||selectionDayTxt.length>0&&opts.showClearDateBtn}" [disabled]="opts.componentDisabled">
                 <span class="mydpicon icon-calendar" [ngStyle]="{'line-height': opts.height}"></span>
             </button>
         </div>
     </div>
-    <div class="selector" *ngIf="showSelector||opts.inline" [mydpfocus]="opts.inline?'0':'1'" [ngStyle]="{'bottom': getSelectorTopPosition()}" [ngClass]="{'inlinedp': opts.inline, 'alignselectorright': opts.alignSelectorRight, 'selectorarrow': opts.showSelectorArrow&&!opts.inline, 'selectorarrowleft': opts.showSelectorArrow&&!opts.alignSelectorRight&&!opts.inline, 'selectorarrowright': opts.showSelectorArrow&&opts.alignSelectorRight&&!opts.inline}" tabindex="0">
+    <div class="selector" *ngIf="showSelector||opts.inline" [mydpfocus]="opts.inline?'0':'1'" [ngStyle]="{'bottom': getSelectorTopPosition()}"
+        [ngClass]="{'inlinedp': opts.inline, 'alignselectorright': opts.alignSelectorRight, 'selectorarrow': opts.showSelectorArrow&&!opts.inline, 'selectorarrowleft': opts.showSelectorArrow&&!opts.alignSelectorRight&&!opts.inline, 'selectorarrowright': opts.showSelectorArrow&&opts.alignSelectorRight&&!opts.inline}"
+        tabindex="0">
         <table class="header">
             <tr>
                 <div class="infopanel">
-                    <button class="headerlabelbtn" type="button" [ngClass]="{'yearlabel': opts.editableMonthAndYear}" *ngIf="!editYear" (click)="opts.editableMonthAndYear&&editYearClicked($event)" tabindex="{{opts.editableMonthAndYear?'0':'-1'}}">{{visibleMonth.year}}</button>
-                    <span>{{infoPanelDay.year}}</span>
-                    <span>{{infoPanelDay.weekDay}}</span>
-                    <span>{{infoPanelDay.monthText}}</span>
-                    <span>{{infoPanelDay.day}}</span>
-                </div>                
+                    <!--<button class="headerlabelbtn" type="button" [ngClass]="{'yearlabel': opts.editableMonthAndYear}" *ngIf="!editYear" (click)="opts.editableMonthAndYear&&editYearClicked($event)" tabindex="{{opts.editableMonthAndYear?'0':'-1'}}">{{visibleMonth.year}}</button>-->
+                    <div class="infoyearlabel">{{infoPanelDay.year}}</div>
+                    <div class="infodatelabel">{{infoPanelDay.weekDay}}, {{infoPanelDay.monthText}} {{infoPanelDay.day}}</div>
+                </div>
             </tr>
             <tr>
                 <!--<td>
@@ -45,15 +47,18 @@
                 </td>-->
                 <td class="month-selector">
                     <div>
-                        <div class="headerbtncell"><button type="button" aria-label="Previous Month" class="headerbtn" (click)="prevMonth()" [disabled]="prevMonthDisabled" [ngClass]="{'headerbtnenabled': !prevMonthDisabled, 'headerbtndisabled': prevMonthDisabled}">
+                        <div class="headerbtncell"><button type="button" aria-label="Previous Month" class="headerbtn" (click)="prevMonth()" [disabled]="prevMonthDisabled"
+                                [ngClass]="{'headerbtnenabled': !prevMonthDisabled, 'headerbtndisabled': prevMonthDisabled}">
                             <svg style="display: inline-block; fill: rgba(0, 0, 0, 0.87); height: 24px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;" viewBox="0 0 24 24"> <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path> </svg>
                         </button></div>
                         <div class="headermonthtxt">
                             <!--<input type="text" *ngIf="editMonth" class="monthinput" maxlength="10" [mydpfocus]="2" [value]="visibleMonth.monthTxt" (keyup)="userMonthInput($event)" (click)="$event.stopPropagation()" [ngClass]="{'invalidmonth': invalidMonth}">-->
                             <!--<button class="headerlabelbtn" type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="opts.editableMonthAndYear&&editMonthClicked($event)" tabindex="{{opts.editableMonthAndYear?'0':'-1'}}">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>-->
-                            <span [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="opts.editableMonthAndYear&&editMonthClicked($event)" tabindex="{{opts.editableMonthAndYear?'0':'-1'}}">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</span>
+                            <span [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="opts.editableMonthAndYear&&editMonthClicked($event)"
+                                tabindex="{{opts.editableMonthAndYear?'0':'-1'}}">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</span>
                         </div>
-                        <div class="headerbtncell"><button type="button" aria-label="Next Month" class="headerbtn" (click)="nextMonth()" [disabled]="nextMonthDisabled" [ngClass]="{'headerbtnenabled': !nextMonthDisabled, 'headerbtndisabled': nextMonthDisabled}">
+                        <div class="headerbtncell"><button type="button" aria-label="Next Month" class="headerbtn" (click)="nextMonth()" [disabled]="nextMonthDisabled"
+                                [ngClass]="{'headerbtnenabled': !nextMonthDisabled, 'headerbtndisabled': nextMonthDisabled}">
                             <svg style="display: inline-block; fill: rgba(0, 0, 0, 0.87); height: 24px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;" viewBox="0 0 24 24"> <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path> </svg>
                         </button></div>
                     </div>
@@ -71,17 +76,23 @@
             </tr>
         </table>
         <table class="caltable">
-            <thead><tr><th class="weekdaytitle weekdaytitleweeknbr" *ngIf="opts.showWeekNumbers&&opts.firstDayOfWeek==='mo'">#</th><th class="weekdaytitle" scope="col" *ngFor="let d of weekDays">{{d}}</th></tr></thead>
+            <thead>
+                <tr>
+                    <th class="weekdaytitle weekdaytitleweeknbr" *ngIf="opts.showWeekNumbers&&opts.firstDayOfWeek==='mo'">#</th>
+                    <th class="weekdaytitle" scope="col" *ngFor="let d of weekDays">{{d}}</th>
+                </tr>
+            </thead>
             <tbody>
-            <tr *ngFor="let w of dates">
-                <td class="daycell daycellweeknbr" *ngIf="opts.showWeekNumbers&&opts.firstDayOfWeek==='mo'">{{w.weekNbr}}</td>
-                <td class="daycell" *ngFor="let d of w.week" [ngClass]="{'currmonth':d.cmo===CURR_MONTH&&!d.disabled, 'selectedday':selectedDate.day===d.dateObj.day && selectedDate.month===d.dateObj.month && selectedDate.year===d.dateObj.year && d.cmo===CURR_MONTH, 'disabled': d.disabled, 'tablesingleday': d.cmo===CURR_MONTH&&!d.disabled}" (click)="!d.disabled&&cellClicked(d);$event.stopPropagation()" (keydown)="cellKeyDown($event, d)" tabindex="0">
-                    <div [ngClass]="{'prevmonth':d.cmo===PREV_MONTH,'currmonth':d.cmo===CURR_MONTH,'nextmonth':d.cmo===NEXT_MONTH,'sunday':d.dayNbr === 0 && opts.sunHighlight, 'focus': !selectionDayTxt&&d.currDay&&opts.markCurrentDay}">
-                        <span [ngClass]="{'currday':d.currDay&&opts.markCurrentDay, 'sundayDim': opts.sunHighlight && d.dayNbr === 0 && (d.cmo===PREV_MONTH || d.cmo===NEXT_MONTH || d.disabled)}">{{d.dateObj.day}}</span>
-                    </div>
-                </td>
-            </tr>
+                <tr *ngFor="let w of dates">
+                    <td class="daycell daycellweeknbr" *ngIf="opts.showWeekNumbers&&opts.firstDayOfWeek==='mo'">{{w.weekNbr}}</td>
+                    <td class="daycell" *ngFor="let d of w.week" [ngClass]="{'currmonth':d.cmo===CURR_MONTH&&!d.disabled, 'selectedday':selectedDate.day===d.dateObj.day && selectedDate.month===d.dateObj.month && selectedDate.year===d.dateObj.year && d.cmo===CURR_MONTH, 'disabled': d.disabled, 'tablesingleday': d.cmo===CURR_MONTH&&!d.disabled}"
+                        (click)="!d.disabled&&cellClicked(d);$event.stopPropagation()" (keydown)="cellKeyDown($event, d)" tabindex="0">
+                        <div [ngClass]="{'prevmonth':d.cmo===PREV_MONTH,'currmonth':d.cmo===CURR_MONTH,'nextmonth':d.cmo===NEXT_MONTH,'sunday':d.dayNbr === 0 && opts.sunHighlight, 'focus': !selectionDayTxt&&d.currDay&&opts.markCurrentDay}">
+                            <span [ngClass]="{'currday':d.currDay&&opts.markCurrentDay, 'sundayDim': opts.sunHighlight && d.dayNbr === 0 && (d.cmo===PREV_MONTH || d.cmo===NEXT_MONTH || d.disabled)}">{{d.dateObj.day}}</span>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
-        </table>        
+        </table>
     </div>
 </div>
