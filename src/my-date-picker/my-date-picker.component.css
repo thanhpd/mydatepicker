@@ -509,6 +509,7 @@
     background-color: #3f51b5;
     color: rgba(255, 255, 255, 0.87);
     padding: 22px 24px 0 24px;
+    min-height: 95px;
 }
 
 .mydp .infopanel button {
@@ -519,6 +520,17 @@
 
 .mydp .infopanel button.yearbtn {
     font-size: 16px;    
+}
+
+.mydp .infopanel .infoyearlabel {
+    font-size: 16px;
+    color: #fff;
+}
+
+.mydp .infopanel .infodatelabel {
+    font-size: 32px;
+    color: #fff;
+    line-height: 1.5;
 }
 
 .mydp .month-selector {
