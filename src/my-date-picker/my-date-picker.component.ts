@@ -62,6 +62,8 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     prevYearDisabled: boolean = false;
     nextYearDisabled: boolean = false;
 
+    isYearViewVisible: boolean = false;
+
     PREV_MONTH: number = 1;
     CURR_MONTH: number = 2;
     NEXT_MONTH: number = 3;
@@ -76,6 +78,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     opts: IMyOptions = {
         dayLabels: <IMyDayLabels> {},
         monthLabels: <IMyMonthLabels> {},
+        monthFullLabels: <IMyMonthLabels> {},
         dateFormat: <string> "",
         showTodayBtn: <boolean> true,
         todayBtnTxt: <string> "",
@@ -115,6 +118,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         renderer.listenGlobal("document", "click", (event: any) => {
             if (this.showSelector && event.target && this.elem.nativeElement !== event.target && !this.elem.nativeElement.contains(event.target)) {
                 this.showSelector = false;
+                this.isYearViewVisible = false;
                 this.calendarToggle.emit(4);
             }
             if (this.opts.editableMonthAndYear && event.target && this.elem.nativeElement.contains(event.target)) {
@@ -223,7 +227,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         if (m !== -1) {
             this.editMonth = false;
             if (m !== this.visibleMonth.monthNbr) {
-                this.visibleMonth = {monthTxt: this.monthText(m), monthNbr: m, year: this.visibleMonth.year};
+                this.visibleMonth = {monthTxt: this.monthFullText(m), monthNbr: m, year: this.visibleMonth.year};
                 this.generateCalendar(m, this.visibleMonth.year, true);
             }
         }
@@ -349,6 +353,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
             this.calendarToggle.emit(3);
         }
         this.showSelector = false;
+        this.isYearViewVisible = false;
     }
 
     openBtnClicked(): void {
@@ -395,7 +400,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         let y: number = d.getFullYear();
         let m: number = d.getMonth() + 1;
 
-        this.visibleMonth = {monthTxt: this.monthText(m), monthNbr: m, year: y};
+        this.visibleMonth = {monthTxt: this.monthFullText(m), monthNbr: m, year: y};
         this.generateCalendar(m, y, true);
     }
 
@@ -407,7 +412,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         let y: number = d.getFullYear();
         let m: number = d.getMonth() + 1;
 
-        this.visibleMonth = {monthTxt: this.monthText(m), monthNbr: m, year: y};
+        this.visibleMonth = {monthTxt: this.monthFullText(m), monthNbr: m, year: y};
         this.generateCalendar(m, y, true);
     }
 
@@ -483,6 +488,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
             this.calendarToggle.emit(2);
         }
         this.showSelector = false;
+        this.isYearViewVisible = false;
     }
 
     updateDateValue(date: IMyDate, clear: boolean): void {
@@ -512,6 +518,11 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     monthText(m: number): string {
         // Returns month as a text
         return this.opts.monthLabels[m];
+    }
+
+    monthFullText(m: number): string {
+        // Returns month as a text
+        return this.opts.monthFullLabels[m];
     }
 
     monthStartIdx(y: number, m: number): number {
@@ -671,5 +682,10 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         this.prevYearDisabled = y - 1 < this.opts.minYear || dpy;
         this.nextMonthDisabled = m === 12 && y === this.opts.maxYear || dnm;
         this.nextYearDisabled = y + 1 > this.opts.maxYear || dny;
+    }
+
+    openSelectYearMonth(event: any): void {
+        this.isYearViewVisible = !this.isYearViewVisible;
+        console.log(event);
     }
 }

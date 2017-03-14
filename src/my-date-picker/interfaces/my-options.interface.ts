@@ -6,6 +6,7 @@ import { IMyDateRange } from "./my-date-range.interface";
 export interface IMyOptions {
     dayLabels?: IMyDayLabels;
     monthLabels?: IMyMonthLabels;
+    monthFullLabels?: IMyMonthLabels;
     dateFormat?: string;
     showTodayBtn?: boolean;
     todayBtnTxt?: string;
