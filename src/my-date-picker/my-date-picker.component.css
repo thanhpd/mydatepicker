@@ -562,7 +562,9 @@
     background: none;
 }
 
-
+.mydp .month-year-button {
+    align-self: center;
+}
 
 /**
  * Applies styles for users in high contrast mode. Note that this only applies
