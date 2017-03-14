@@ -74,13 +74,13 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
     // Default options
     opts: IMyOptions = {
-        dayLabels: <IMyDayLabels> {su: 'S', mo: 'M', tu: 'T', we: 'W', th: 'T', fr: 'F', sa: 'S'},
-        monthLabels: <IMyMonthLabels> { 1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December' },
-        dateFormat: <string> "dd/mm/yyyy",
+        dayLabels: <IMyDayLabels> {},
+        monthLabels: <IMyMonthLabels> {},
+        dateFormat: <string> "",
         showTodayBtn: <boolean> true,
-        todayBtnTxt: <string> "Today",
-        firstDayOfWeek: <string> "mo",
-        sunHighlight: <boolean> false,
+        todayBtnTxt: <string> "",
+        firstDayOfWeek: <string> "",
+        sunHighlight: <boolean> true,
         markCurrentDay: <boolean> true,
         disableUntil: <IMyDate> {year: 0, month: 0, day: 0},
         disableSince: <IMyDate> {year: 0, month: 0, day: 0},
@@ -98,13 +98,13 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         openSelectorTopOfInput: <boolean> false,
         indicateInvalidDate: <boolean> true,
         editableDateField: <boolean> true,
-        editableMonthAndYear: <boolean> false,
+        editableMonthAndYear: <boolean> true,
         disableHeaderButtons: <boolean> true,
         minYear: <number> this.MIN_YEAR,
         maxYear: <number> this.MAX_YEAR,
         componentDisabled: <boolean> false,
         inputValueRequired: <boolean> false,
-        showSelectorArrow: <boolean> false,
+        showSelectorArrow: <boolean> true,
         showInputField: <boolean> true,
         openSelectorOnInputClick: <boolean> false,
         inputAutoFill: <boolean> true,
@@ -359,7 +359,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     }
 
     openBtnClicked(): void {
-        this.infoPanelDay = (this.selectionDayTxt) ? this.utilService.getInfoPanelDay(this.selectedDate) : this.utilService.getInfoPanelDay(this.getToday());
+        this.infoPanelDay = (this.selectionDayTxt && !this.invalidDate) ? this.utilService.getInfoPanelDay(this.selectedDate) : this.utilService.getInfoPanelDay(this.getToday());
         // Open selector button clicked
         this.showSelector = !this.showSelector;
         if (this.showSelector) {
@@ -627,7 +627,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         this.setHeaderBtnDisabledState(m, y);
 
         if (notifyChange) {
-            // Notify parent
+            // Notify parent            
             this.calendarViewChanged.emit({year: y, month: m, first: {number: 1, weekday: this.getWeekday({year: y, month: m, day: 1})}, last: {number: dInThisM, weekday: this.getWeekday({year: y, month: m, day: dInThisM})}});
         }
     }

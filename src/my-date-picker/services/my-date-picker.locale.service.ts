@@ -202,7 +202,18 @@ export class LocaleService {
             todayBtnTxt: "Hari ini",
             firstDayOfWeek: "su",
             sunHighlight: true
+        },
+        "material": {
+            dayLabels: {su: 'S', mo: 'M', tu: 'T', we: 'W', th: 'T', fr: 'F', sa: 'S'},
+            monthLabels: { 1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December' },
+            dateFormat: "dd/mm/yyyy",
+            showTodayBtn: false,
+            firstDayOfWeek: "su",
+            sunHighlight: false,
+            editableMonthAndYear: false,
+            showSelectorArrow: false
         }
+
     };
 
     getLocaleOptions(locale: string): IMyOptions {
@@ -210,7 +221,7 @@ export class LocaleService {
             // User given locale
             return this.locales[locale];
         }
-        // Default: en
-        return this.locales["en"];
+        // Default: osbc
+        return this.locales["material"];
     }
 }

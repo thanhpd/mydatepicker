@@ -154,8 +154,15 @@
 }
 
 .mydp .btnpicker:active,
-.mydp .btnclear:active {
+.mydp .btnclear:active,
+.mydp .btnpicker:hover,
+.mydp .btnclear:hover {
   box-shadow: none;
+  color: #3949ab;
+}
+
+.mydp .btnpicker.btnpickerfocused {
+  color: #3949ab;
 }
 
 /*.mydp .btnleftborder {
@@ -362,6 +369,13 @@
 .mydp .headertodaybtn,
 .mydp .selection {
     color: #000;
+}
+
+.mydp .headerbtn.headerbtnenabled.month-navigate:focus,
+.mydp .headerbtn.headerbtnenabled.month-navigate:hover,
+.mydp .headerbtn.headerbtnenabled.month-navigate:active {
+    background-color: #e0e0e0;
+    border-radius: 50%;
 }
 
 .mydp .headertodaybtn {
