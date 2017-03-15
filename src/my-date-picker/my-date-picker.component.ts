@@ -386,7 +386,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
             y = this.selectedDate.year;
             m = this.selectedDate.month;
         }
-        this.visibleMonth = {monthTxt: this.opts.monthLabels[m], monthNbr: m, year: y};
+        this.visibleMonth = {monthTxt: this.opts.monthFullLabels[m], monthNbr: m, year: y};
 
         // Create current month
         this.generateCalendar(m, y, true);
@@ -433,7 +433,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         let today: IMyDate = this.getToday();
         this.selectDate(today);
         if (this.opts.inline && today.year !== this.visibleMonth.year || today.month !== this.visibleMonth.monthNbr) {
-            this.visibleMonth = {monthTxt: this.opts.monthLabels[today.month], monthNbr: today.month, year: today.year};
+            this.visibleMonth = {monthTxt: this.opts.monthFullLabels[today.month], monthNbr: today.month, year: today.year};
             this.generateCalendar(today.month, today.year, true);
         }
     }

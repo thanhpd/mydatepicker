@@ -299,8 +299,7 @@
 
 .mydp .disabled {
   cursor: default !important;
-  color: #CCC !important;
-  background: #FBEFEF !important;
+  color: #CCC !important;  
 }
 
 .mydp .sunday {
@@ -372,7 +371,6 @@
   color: #000;
 }
 
-.mydp .headerbtn.headerbtnenabled.month-navigate:focus,
 .mydp .headerbtn.headerbtnenabled.month-navigate:hover,
 .mydp .headerbtn.headerbtnenabled.month-navigate:active {
   background-color: #e0e0e0;
@@ -432,6 +430,10 @@
 .mydp .daycell:not(.daycellweeknbr):focus div,
 .mydp .daycell:not(.daycellweeknbr) div:hover {
   background: #e0e0e0;
+}
+
+.mydp .daycell.disabled:not(.daycellweeknbr) div {
+  background: #FBEFEF !important;
 }
 
 .mydp .icon-calendar,
@@ -568,6 +570,10 @@
 
 .mydp .month-year-button {
   align-self: center;
+}
+
+.mydp .month-year-button .md-button-wrapper {
+  font-weight: 600;
 }
 
 .mydp .selector-content {

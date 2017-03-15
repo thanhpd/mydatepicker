@@ -213,7 +213,7 @@ export class LocaleService {
             // User given locale
             return this.locales[locale];
         }
-        // Default: osbc
+        // Default: Material - English
         return this.locales["material"];
     }
 }
