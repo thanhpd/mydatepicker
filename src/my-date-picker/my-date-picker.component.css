@@ -634,7 +634,21 @@
   outline: none;
 }
 
+.mydp .yearpicker tbody tr:first-child .yearlbl {
+  padding-top: 5px;
+}
+
+.mydp .yearpicker tbody tr:first-child .monthcell {
+  padding-top: 5px;
+}
+
+.mydp .yearpicker tbody tr:last-child .monthcell {
+  padding-bottom: 5px;
+}
+
 .mydp .yearpicker .yearrow {
+  padding-top: 5px;
+  padding-bottom: 5px;
   border-bottom: 1px solid #e0e0e0;
 }
 
@@ -659,6 +673,15 @@
   background-color: #e0e0e0;
 }
 
+.mydp .yearpicker .monthcell.current:not(.selected) .monthlbl {
+  color: #3f51b5;
+  font-weight: 600;
+}
+
+.mydp .yearpicker .monthcell.selected .monthlbl {
+  color: #fff;
+  background-color: #3f51b5;  
+}
 
 /**
  * Applies styles for users in high contrast mode. Note that this only applies

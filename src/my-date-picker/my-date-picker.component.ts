@@ -75,6 +75,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
     // Custom properties for display datetime panel of Material Design
     infoPanelDay: IMyInfoPanelDay = this.utilService.getInfoPanelDay(this.getToday());
+    today: IMyDate = this.getToday();
 
     // Default options
     opts: IMyOptions = {
