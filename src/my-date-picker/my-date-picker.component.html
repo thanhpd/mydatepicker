@@ -90,22 +90,22 @@
                 </table>
             </div>
             <div class="yearpicker" [class.active]="isYearViewVisible">
-                <table>
-                    <tbody role="rowgroup" class="year-row">
-                        <tr>
-                            <td class="year-row-label">1</td>
-                            <td *ngFor="let monthidx of [1,2,3,4,5,6]">{{opts.monthLabels[monthidx]}}</td>
-                        </tr>
-                        <tr>
-                            <td class="year-row-label"></td>
-                            <td *ngFor="let monthidx of [7,8,9,10,11,12]">{{opts.monthLabels[monthidx]}}</td>
-                        </tr>
-                    </tbody>
-                    <tr>
-                        <button md-button type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="openSelectYearMonth($event)"
-                                        tabindex="{{opts.editableMonthAndYear?'0':'-1'}}" class="month-year-button">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>
-                    </tr>
-                </table>
+                <div class="yearpickerwrapper">
+                    <table class="caltable">
+                        <tbody role="rowgroup" class="yearrow">
+                            <tr *ngFor="let i of [1, 2]">
+                                <td class="yearlbl" *ngIf="i == 1">2017</td>
+                                <td class="yearlbl" *ngIf="i != 1"></td>
+                                <td *ngFor="let monthidx of [1,2,3,4,5,6]" tabindex="-1" role="gridcell" class="monthcell">
+                                    <span class="monthlbl" *ngIf="i == 1">{{opts.monthLabels[monthidx]}}</span>
+                                    <span class="monthlbl" *ngIf="i != 1">{{opts.monthLabels[monthidx + 6]}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button md-button type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="openSelectYearMonth($event)"
+                        tabindex="{{opts.editableMonthAndYear?'0':'-1'}}" class="month-year-button">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>
+                </div>
             </div>
         </div>
     </div>
