@@ -92,14 +92,19 @@
             <div class="yearpicker" [class.active]="isYearViewVisible">
                 <div class="yearpickerwrapper">
                     <table class="caltable">
-                        <tbody role="rowgroup" class="yearrow">
+                        <tbody role="rowgroup" class="yearrow" *ngFor="let item of years">
                             <tr *ngFor="let i of [1, 2]">
-                                <td class="yearlbl" *ngIf="i == 1">2017</td>
+                                <td class="yearlbl" *ngIf="i == 1">{{item.year}}</td>
                                 <td class="yearlbl" *ngIf="i != 1"></td>
-                                <td *ngFor="let monthidx of [1,2,3,4,5,6]" tabindex="-1" role="gridcell" class="monthcell">
-                                    <span class="monthlbl" *ngIf="i == 1">{{opts.monthLabels[monthidx]}}</span>
-                                    <span class="monthlbl" *ngIf="i != 1">{{opts.monthLabels[monthidx + 6]}}</span>
-                                </td>
+                                <template ngFor let-month [ngForOf]="item.months" let-index="index">
+                                    <td tabindex="-1" role="gridcell" class="monthcell" (click)="monthCellClicked(month);$event.stopPropagation()" *ngIf="index < 6 && i == 1 || index >= 6 && i != 1">
+                                        <span class="monthlbl">{{month.monthTxt}}</span>
+                                    </td>                                    
+                                </template>
+                                <!--<td *ngFor="let monthidx of [0,1,2,3,4,5]" tabindex="-1" role="gridcell" class="monthcell" (click)="monthCellClicked(item);$event.stopPropagation()">
+                                    <span class="monthlbl" *ngIf="i == 1">{{item.months[monthidx].monthTxt}}</span>
+                                    <span class="monthlbl" *ngIf="i != 1">{{item.months[monthidx+6].monthTxt}}</span>
+                                </td>-->
                             </tr>
                         </tbody>
                     </table>

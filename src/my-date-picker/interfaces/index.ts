@@ -13,3 +13,4 @@ export * from "./my-weekday.interface";
 export * from "./my-calendar-view-changed.interface";
 export * from "./my-input-auto-fill.interface";
 export * from "./my-infopanel-day.interface";
+export * from "./my-year.interface";

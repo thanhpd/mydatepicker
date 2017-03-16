@@ -618,24 +618,44 @@
 
 .mydp .yearpicker .yearlbl {
   font-weight: 600;
-  width: 50px;
+  width: 75px;
   height: 40px;
   padding: 0 2px;
   font-size: 14px;
+  padding-left: 25px;
 }
 
 .mydp .yearpicker .monthcell {
   cursor: pointer;
-  width: 40px;
+  width: 42px;
   height: 40px;
-  padding: 0 2px;
-  border-radius: 50%;
+  padding: 0 1px;  
   text-align: center;
   outline: none;
 }
 
-.mydp .yearpicker .monthcell:hover,
-.mydp .yearpicker .monthcell:focus {
+.mydp .yearpicker .yearrow {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.mydp .yearpicker .yearrow:first-of-type {
+  border-top: 1px solid #e0e0e0;
+}
+
+.mydp .yearpicker .yearrow tr td.monthcell:last-of-type {
+  padding-right: 12px;
+}
+
+.mydp .yearpicker .monthcell .monthlbl {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  line-height: 40px;
+  display: block;
+}
+
+.mydp .yearpicker .monthcell:hover .monthlbl,
+.mydp .yearpicker .monthcell:focus .monthlbl {
   background-color: #e0e0e0;
 }
 
