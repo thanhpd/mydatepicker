@@ -66,7 +66,7 @@
                                 <div class="headermonthtxt">
                                     <!--<input type="text" *ngIf="editMonth" class="monthinput" maxlength="10" [mydpfocus]="2" [value]="visibleMonth.monthTxt" (keyup)="userMonthInput($event)" (click)="$event.stopPropagation()" [ngClass]="{'invalidmonth': invalidMonth}">-->
                                     <!--<button class="headerlabelbtn" type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="opts.editableMonthAndYear&&editMonthClicked($event)" tabindex="{{opts.editableMonthAndYear?'0':'-1'}}">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>-->
-                                    <button md-button type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="openSelectYearMonth($event)"
+                                    <button md-button type="button" [ngClass]="{'monthlabel': opts.editableMonthAndYear}" *ngIf="!editMonth" (click)="openSelectYearMonth()"
                                         tabindex="{{opts.editableMonthAndYear?'0':'-1'}}" class="month-year-button">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>
                                 </div>
                                 <div class="headerbtncell">
@@ -111,14 +111,14 @@
                 </table>
             </div>
             <div class="yearpicker" [class.active]="isYearViewVisible">
-                <div class="yearpickerwrapper">
+                <div class="yearpickerwrapper" (scroll)="onScroll($event)">
                     <table class="caltable">
-                        <tbody role="rowgroup" class="yearrow" *ngFor="let item of years">
+                        <tbody role="rowgroup" class="yearrow" *ngFor="let year of years">
                             <tr *ngFor="let i of [1, 2]">
-                                <td class="yearlbl" *ngIf="i == 1">{{item.year}}</td>
+                                <td class="yearlbl" *ngIf="i == 1">{{year}}</td>
                                 <td class="yearlbl" *ngIf="i != 1"></td>
-                                <template ngFor let-month [ngForOf]="item.months" let-index="index">
-                                    <td tabindex="-1" role="gridcell" class="monthcell" [ngClass]="{'selected': month.monthNbr===selectedDate.month, 'current': month.monthNbr===today.month}" (click)="monthCellClicked(month);$event.stopPropagation()" *ngIf="index < 6 && i == 1 || index >= 6 && i != 1">
+                                <template ngFor let-month [ngForOf]="monthsInYear" let-index="index">
+                                    <td tabindex="-1" role="gridcell" class="monthcell" [ngClass]="{'selected': month.monthNbr===selectedDate.month&&year===selectedDate.year, 'current': month.monthNbr===today.month&&year===today.year}" (click)="monthCellClicked(month, year);$event.stopPropagation()" *ngIf="index < 6 && i == 1 || index >= 6 && i != 1">
                                         <span class="monthlbl">{{month.monthTxt}}</span>
                                     </td>                                    
                                 </template>                                

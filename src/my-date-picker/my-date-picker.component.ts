@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ElementRef, ViewEncapsulation, Renderer, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { IMyDate, IMyDateRange, IMyMonth, IMyCalendarDay, IMyWeek, IMyDayLabels, IMyMonthLabels, IMyOptions, IMyDateModel, IMyInputAutoFill, IMyInputFieldChanged, IMyCalendarViewChanged, IMyInfoPanelDay, IMyYear } from "./interfaces/index";
+import { IMyDate, IMyDateRange, IMyMonth, IMyCalendarDay, IMyWeek, IMyDayLabels, IMyMonthLabels, IMyOptions, IMyDateModel, IMyInputAutoFill, IMyInputFieldChanged, IMyCalendarViewChanged, IMyInfoPanelDay, IMyMonthMeta } from "./interfaces/index";
 import { LocaleService } from "./services/my-date-picker.locale.service";
 import { UtilService } from "./services/my-date-picker.util.service";
 
@@ -45,8 +45,8 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     selectedDate: IMyDate = { year: 0, month: 0, day: 0 };
     weekDays: Array<string> = [];
     dates: Array<IMyWeek> = [];
-    monthsInYear: Array<IMyMonth> = [];
-    years: Array<IMyYear> = [];
+    monthsInYear: Array<IMyMonthMeta> = [];
+    years: Array<number> = [];
     selectionDayTxt: string = "";
     invalidDate: boolean = false;
     disableTodayBtn: boolean = false;
@@ -165,13 +165,12 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
     initMonthsInYear(): void {
         if (this.monthsInYear.length === 0) {
-            console.log(this.opts.monthLabels);
             let y = this.selectedDate.year ? this.selectedDate.year : this.getToday().year;
             for (let i = 1; i <= 12; i++) {
-                let month: IMyMonth = { monthNbr: i, monthTxt: this.opts.monthLabels[i], year: y };
+                let month: IMyMonthMeta = { monthNbr: i, monthTxt: this.opts.monthLabels[i] };
                 this.monthsInYear.push(month);
             }
-            this.createYearRow(y);
+            this.createYearCalendar(y);
         }
         else {
             this.monthsInYear.forEach((month, index) => {
@@ -713,31 +712,42 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         this.nextYearDisabled = y + 1 > this.opts.maxYear || dny;
     }
 
-    openSelectYearMonth(event: any): void {
-        this.isYearViewVisible = !this.isYearViewVisible;
-        console.log(event);
+    openSelectYearMonth(): void {
+        this.isYearViewVisible = true;
+        this.createYearCalendar(this.visibleMonth.year);
     }
 
-    monthCellClicked(month: IMyMonth): void {
-        console.log(month);
-        this.visibleMonth = { monthTxt: this.monthFullText(month.monthNbr), monthNbr: month.monthNbr, year: month.year };
-        this.generateCalendar(month.monthNbr, month.year, true);
+    monthCellClicked(month: IMyMonthMeta, year: number): void {
+        this.visibleMonth = { monthTxt: this.monthFullText(month.monthNbr), monthNbr: month.monthNbr, year: year };
+        this.generateCalendar(month.monthNbr, year, true);
         this.isYearViewVisible = false;
     }
 
-    createYearRow(year: number) {
-        // Create new year row
-        let monthsInYear: Array<IMyMonth> = [...this.monthsInYear];
-        monthsInYear.forEach((month, index) => {
-            month.year = year;
-        });
-        let myYear: IMyYear = { year: year, months: monthsInYear };
+    createYearCalendar(year: number): void {
+        // Clear existing year calendar
+        this.years = [];
 
-        // Append the new row at start or end of array depends on if the new row year is earlier or later than the first element of array
-        if (this.years.length === 0 || this.years.length > 0 && this.years[0].year < myYear.year) {
-            this.years.push(myYear);
-        } else if (this.years.length > 0 && this.years[0].year > myYear.year) {
-            this.years.unshift(myYear);
+        // Create default yearrow
+        this.createYearRow(year);
+
+        // Create next 5 yearrows
+        for (let i = 1; i <= 5; i++) {
+            this.createYearRow(year + i);
+            this.createYearRow(year - i);
         }
+    }
+
+    createYearRow(year: number): void {
+        // Append the new row at start or end of array depends on if the new row year is earlier or later than the first element of array
+        if (this.years.length === 0 || this.years.length > 0 && this.years[this.years.length - 1] < year) {
+            this.years.push(year);
+        } else if (this.years.length > 0 && this.years[0] > year) {
+            this.years.unshift(year);
+        }
+    }
+
+    onScroll($event: any): void {
+        console.log("scroll");
+        console.log($event);
     }
 }
