@@ -748,6 +748,8 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
     onScroll($event: any): void {
         console.log("scroll");
-        console.log($event);
+        console.log("scrollHeight:" + $event.target.scrollHeight);
+        console.log("scrollTop:" + $event.target.scrollTop);
+        console.log("clientHeight:" + $event.target.clientHeight);
     }
 }

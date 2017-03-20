@@ -7,7 +7,7 @@
                 [readonly]="!opts.editableDateField" [required]="opts.inputValueRequired" (click)="handleInputClick($event)">
         </md-input-container>
         <div class="selbtngroup" [style.height]="opts.height">
-            <button type="button" md-mini-fab type="button" [attr.aria-label]="opts.ariaLabelClearDate" class="btnclear" *ngIf="selectionDayTxt.length>0&&opts.showClearDateBtn"
+            <button type="button" type="button" [attr.aria-label]="opts.ariaLabelClearDate" class="btnclear" *ngIf="selectionDayTxt.length>0&&opts.showClearDateBtn"
                 (click)="removeBtnClicked()" [ngClass]="{'btnclearenabled': !opts.componentDisabled, 'btncleardisabled': opts.componentDisabled, 'btnleftborder': opts.showInputField}"
                 [disabled]="opts.componentDisabled">
                 <span class="mydpicon icon-cross" [ngStyle]="{'line-height': opts.height}"></span>
@@ -37,7 +37,7 @@
                         <td class="month-selector">
                             <div>
                                 <div class="headerbtncell">
-                                    <button type="button" aria-label="Previous Month" class="headerbtn month-navigate" (click)="prevMonth()" [disabled]="prevMonthDisabled"
+                                    <button type="button" [attr.aria-label]="opts.ariaLabelPrevMonth" class="headerbtn month-navigate" (click)="prevMonth()" [disabled]="prevMonthDisabled"
                                         [ngClass]="{'headerbtnenabled': !prevMonthDisabled, 'headerbtndisabled': prevMonthDisabled}">
                                 <svg style="display: inline-block; fill: rgba(0, 0, 0, 0.87); height: 24px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;" viewBox="0 0 24 24"> <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path> </svg>
                             </button>
@@ -47,7 +47,7 @@
                                         tabindex="{{opts.editableMonthAndYear?'0':'-1'}}" class="month-year-button">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>
                                 </div>
                                 <div class="headerbtncell">
-                                    <button type="button" aria-label="Next Month" class="headerbtn month-navigate" (click)="nextMonth()" [disabled]="nextMonthDisabled"
+                                    <button type="button" [attr.aria-label]="opts.ariaLabelNextMonth" class="headerbtn month-navigate" (click)="nextMonth()" [disabled]="nextMonthDisabled"
                                         [ngClass]="{'headerbtnenabled': !nextMonthDisabled, 'headerbtndisabled': nextMonthDisabled}">
                                 <svg style="display: inline-block; fill: rgba(0, 0, 0, 0.87); height: 24px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;" viewBox="0 0 24 24"> <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path> </svg>
                             </button>
@@ -78,7 +78,7 @@
                 </table>
             </div>
             <div class="yearpicker" [class.active]="isYearViewVisible">
-                <div class="yearpickerwrapper" (scroll)="onScroll($event)">
+                <div class="yearpickerwrapper" mydpinfinitescroll>
                     <table class="caltable">
                         <tbody role="rowgroup" class="yearrow" *ngFor="let year of years">
                             <tr *ngFor="let i of [1, 2]">
