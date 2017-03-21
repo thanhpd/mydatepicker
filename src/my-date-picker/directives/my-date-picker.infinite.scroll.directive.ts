@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Renderer, AfterViewInit, Input } from "@angular/core";
+import { Directive, ElementRef, Renderer, AfterViewInit, Input, Output, EventEmitter } from "@angular/core";
 import { Observable, Subscription } from "rxjs/Rx";
 import "rxjs/add/observable/fromEvent";
 import "rxjs/add/operator/pairwise";
@@ -6,7 +6,8 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/exhaustMap";
 import "rxjs/add/operator/filter";
 import "rxjs/add/operator/startWith";
-import { IScrollPosition } from "../interfaces/scroll-position.interface";
+import { IScrollPosition } from "../interfaces/my-scroll-position.interface";
+import { IScrollStat } from "../interfaces/my-scroll-stat.interface";
 
 const DEFAULT_SCROLL_POSITION: IScrollPosition = {
     scrollHeight: 0,
@@ -20,7 +21,7 @@ const DEFAULT_SCROLL_POSITION: IScrollPosition = {
 
 export class InfiniteScrollDirective implements AfterViewInit {
     @Input() scrollRange = 10;
-
+    @Output() scrollChanged: EventEmitter<IScrollStat> = new EventEmitter<IScrollStat>();
     private scrollEvent$: any;
     private userScrolled$: any;
 
@@ -45,7 +46,7 @@ export class InfiniteScrollDirective implements AfterViewInit {
                 clientHeight: e.target.clientHeight
             }))
             .pairwise()
-            .filter((positions: Array<IScrollPosition>) => this.isScrollingDown(positions));
+            .subscribe((positions: Array<IScrollPosition>) => this.scrollChangedHandler(positions));
     }
 
     private isScrollingDown(positions: Array<IScrollPosition>): boolean {
@@ -56,5 +57,20 @@ export class InfiniteScrollDirective implements AfterViewInit {
     private isScrollOutsideRange(position: IScrollPosition): boolean {
         return (((position.scrollTop + position.clientHeight) / position.scrollHeight) > ((50 + this.scrollRange) / 100)
             || ((position.scrollTop + position.clientHeight) / position.scrollHeight) < ((50 - this.scrollRange) / 100));
+    }
+
+    private scrollChangedHandler(positions: Array<IScrollPosition>): void {
+        console.log(positions);
+        let newPosition: IScrollPosition = positions[1];
+        let prevPosition: IScrollPosition = positions[0];
+        if (this.isScrollingDown(positions) && this.isScrollOutsideRange(newPosition)) {
+            console.log("Fetch new years");
+            let stat: IScrollStat = { isScrollDown: true, addedRows: 5};
+            this.scrollChanged.emit(stat);
+        } else if (!this.isScrollingDown(positions) && this.isScrollOutsideRange(newPosition)) {
+            console.log("Fetch old years");
+            let stat: IScrollStat = { isScrollDown: false, addedRows: 5};
+            this.scrollChanged.emit(stat);
+        }
     }
 }

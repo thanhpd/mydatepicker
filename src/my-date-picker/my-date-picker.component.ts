@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ElementRef, ViewEncapsulation, Renderer, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { IMyDate, IMyDateRange, IMyMonth, IMyCalendarDay, IMyWeek, IMyDayLabels, IMyMonthLabels, IMyOptions, IMyDateModel, IMyInputAutoFill, IMyInputFieldChanged, IMyCalendarViewChanged, IMyInfoPanelDay, IMyMonthMeta } from "./interfaces/index";
+import { IMyDate, IMyDateRange, IMyMonth, IMyCalendarDay, IMyWeek, IMyDayLabels, IMyMonthLabels, IMyOptions, IMyDateModel, IMyInputAutoFill, IMyInputFieldChanged, IMyCalendarViewChanged, IMyInfoPanelDay, IMyMonthMeta, IScrollStat } from "./interfaces/index";
 import { LocaleService } from "./services/my-date-picker.locale.service";
 import { UtilService } from "./services/my-date-picker.util.service";
 
@@ -113,14 +113,14 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         showSelectorArrow: <boolean>true,
         showInputField: <boolean>true,
         openSelectorOnInputClick: <boolean>false,
-        inputAutoFill: <boolean> true,
-        ariaLabelInputField: <string> "Date input field",
-        ariaLabelClearDate: <string> "Clear Date",
-        ariaLabelOpenCalendar: <string> "Open Calendar",
-        ariaLabelPrevMonth: <string> "Previous Month",
-        ariaLabelNextMonth: <string> "Next Month",
-        ariaLabelPrevYear: <string> "Previous Year",
-        ariaLabelNextYear: <string> "Next Year"
+        inputAutoFill: <boolean>true,
+        ariaLabelInputField: <string>"Date input field",
+        ariaLabelClearDate: <string>"Clear Date",
+        ariaLabelOpenCalendar: <string>"Open Calendar",
+        ariaLabelPrevMonth: <string>"Previous Month",
+        ariaLabelNextMonth: <string>"Next Month",
+        ariaLabelPrevYear: <string>"Previous Year",
+        ariaLabelNextYear: <string>"Next Year"
     };
 
     constructor(public elem: ElementRef, private renderer: Renderer, private localeService: LocaleService, private utilService: UtilService) {
@@ -737,19 +737,21 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         }
     }
 
-    createYearRow(year: number): void {
+    createYearRow(year: number, keepRowsConstant?: boolean): void {
         // Append the new row at start or end of array depends on if the new row year is earlier or later than the first element of array
         if (this.years.length === 0 || this.years.length > 0 && this.years[this.years.length - 1] < year) {
             this.years.push(year);
+            if (keepRowsConstant) { this.years.shift(); }
         } else if (this.years.length > 0 && this.years[0] > year) {
             this.years.unshift(year);
+            if (keepRowsConstant) { this.years.pop(); }
         }
     }
 
-    onScroll($event: any): void {
-        console.log("scroll");
-        console.log("scrollHeight:" + $event.target.scrollHeight);
-        console.log("scrollTop:" + $event.target.scrollTop);
-        console.log("clientHeight:" + $event.target.clientHeight);
+    onScroll(stat: IScrollStat): void {
+        for (let i = 0; i < stat.addedRows; i++) {
+            let y: number = stat.isScrollDown ? this.years[this.years.length - 1] + 1 : this.years[0] - 1;
+            this.createYearRow(y, true);
+        }
     }
 }

@@ -78,7 +78,7 @@
                 </table>
             </div>
             <div class="yearpicker" [class.active]="isYearViewVisible">
-                <div class="yearpickerwrapper" mydpinfinitescroll>
+                <div class="yearpickerwrapper" mydpinfinitescroll (scrollChanged)="onScroll($event)">
                     <table class="caltable">
                         <tbody role="rowgroup" class="yearrow" *ngFor="let year of years">
                             <tr *ngFor="let i of [1, 2]">
