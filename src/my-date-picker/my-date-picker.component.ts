@@ -738,6 +738,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     }
 
     createYearRow(year: number, keepRowsConstant?: boolean): void {
+        console.log(`Added year ${year}`);
         // Append the new row at start or end of array depends on if the new row year is earlier or later than the first element of array
         if (this.years.length === 0 || this.years.length > 0 && this.years[this.years.length - 1] < year) {
             this.years.push(year);
