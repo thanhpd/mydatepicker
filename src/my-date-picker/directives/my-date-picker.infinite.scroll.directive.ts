@@ -11,7 +11,7 @@ const DEFAULT_SCROLL_POSITION: IScrollPosition = {
     scrollHeight: 0,
     scrollTop: 0,
     clientHeight: 0
-}
+};
 
 @Directive({
     selector: "[mydpinfinitescroll]"

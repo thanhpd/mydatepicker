@@ -70,8 +70,8 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     CURR_MONTH: number = 2;
     NEXT_MONTH: number = 3;
 
-    MIN_YEAR: number = 1000;
-    MAX_YEAR: number = 9999;
+    MIN_YEAR: number = 1880;
+    MAX_YEAR: number = 2130;
 
     // Custom properties for display datetime panel of Material Design
     infoPanelDay: IMyInfoPanelDay = this.utilService.getInfoPanelDay(this.getToday());
@@ -727,25 +727,24 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         // Clear existing year calendar
         this.years = [];
 
-        // Create default yearrow
-        this.createYearRow(year);
-
         // Create next 5 yearrows
-        for (let i = 1; i <= 5; i++) {
-            this.createYearRow(year + i);
-            this.createYearRow(year - i);
-        }
+        // for (let i = this.MIN_YEAR; i <= this.MAX_YEAR; i++) {
+        //     this.years.push(i);
+        // }
     }
 
     createYearRow(year: number, keepRowsConstant?: boolean): void {
-        console.log(`Added year ${year}`);
         // Append the new row at start or end of array depends on if the new row year is earlier or later than the first element of array
         if (this.years.length === 0 || this.years.length > 0 && this.years[this.years.length - 1] < year) {
             this.years.push(year);
-            if (keepRowsConstant) { this.years.shift(); }
+            // if (keepRowsConstant) {
+            //     setTimeout(() => this.years.shift(), 500);
+            // }
         } else if (this.years.length > 0 && this.years[0] > year) {
             this.years.unshift(year);
-            if (keepRowsConstant) { this.years.pop(); }
+            // if (keepRowsConstant) {
+            //     setTimeout(() => this.years.pop(), 500);
+            // }
         }
     }
 
