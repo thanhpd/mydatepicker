@@ -1,6 +1,10 @@
 ///<reference path="../../node_modules/@types/jasmine/index.d.ts"/>
 
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { FormsModule } from "@angular/forms";
+import { MaterialModule } from "@angular/material";
+import 'hammerjs';
+
+import {ComponentFixture, TestBed, async} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
 import {MyDatePicker} from './my-date-picker.component';
@@ -30,10 +34,14 @@ function getElements(id:string):Array<DebugElement> {
 }
 
 describe('MyDatePicker', () => {
-    beforeEach(() => {
+    beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [
+                MaterialModule.forRoot(),
+                FormsModule
+            ],
             declarations: [MyDatePicker, FocusDirective, InputAutoFillDirective],
-        });
+        });    
 
         fixture = TestBed.createComponent(MyDatePicker);
 
@@ -41,7 +49,7 @@ describe('MyDatePicker', () => {
 
         de = fixture.debugElement.query(By.css('.mydp'));
         el = de.nativeElement;
-    });
+    }));
 
     it('set valid date', () => {
         comp.selectionDayTxt = '2016-08-22';
