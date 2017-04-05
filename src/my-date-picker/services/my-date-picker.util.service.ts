@@ -181,4 +181,9 @@ export class UtilService {
         };
         return infoPanelDay;
     }
+
+    getToday(): IMyDate {
+        let date: Date = new Date();
+        return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+    }
 }

@@ -600,7 +600,23 @@
 .mydp .selector-content .yearpickerwrapper {
   margin-bottom: 5px;
   height: 352px;
-  overflow-y: scroll;
+  overflow: hidden;
+  overflow-y: auto;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mydp .selector-content .yearpickerwrapper .scrollable-content {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.mydp .selector-content .yearpickerwrapper .total-padding {
+  width: 1px;
+  opacity: 0;
 }
 
 .mydp .yearpicker .caltable {
@@ -682,6 +698,8 @@
   color: #fff;
   background-color: #3f51b5;  
 }
+
+
 
 /**
  * Applies styles for users in high contrast mode. Note that this only applies

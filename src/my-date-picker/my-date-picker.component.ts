@@ -77,8 +77,8 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     private supportsTouch: boolean = false;
 
     // Custom properties for display datetime panel of Material Design
-    infoPanelDay: IMyInfoPanelDay = this.utilService.getInfoPanelDay(this.getToday());
-    today: IMyDate = this.getToday();
+    infoPanelDay: IMyInfoPanelDay = this.utilService.getInfoPanelDay(this.utilService.getToday());
+    today: IMyDate = this.utilService.getToday();
 
     // Default options
     opts: IMyOptions = {
@@ -140,8 +140,12 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
             }
         });
 
+        this.touchFeatureDetection();
+    }
+
+    touchFeatureDetection(): void {
         let patternReg: RegExp = /(iphone|ipod|ipad|android|iemobile|blackberry|bada)/;
-        let nativeWindow = windowRef.nativeWindow;
+        let nativeWindow = this.windowRef.nativeWindow;
         this.supportsTouch = ("ontouchstart" in nativeWindow) || nativeWindow.navigator.msMaxTouchPoints || patternReg.test(nativeWindow.navigator.userAgent.toLowerCase());
         console.log(this.supportsTouch);
     }
@@ -174,7 +178,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
     initMonthsInYear(): void {
         if (this.monthsInYear.length === 0) {
-            let y = this.selectedDate.year ? this.selectedDate.year : this.getToday().year;
+            let y = this.selectedDate.year ? this.selectedDate.year : this.utilService.getToday().year;
             for (let i = 1; i <= 12; i++) {
                 let month: IMyMonthMeta = { monthNbr: i, monthTxt: this.opts.monthLabels[i] };
                 this.monthsInYear.push(month);
@@ -294,7 +298,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     }
 
     isTodayDisabled(): void {
-        this.disableTodayBtn = this.utilService.isDisabledDay(this.getToday(), this.opts.disableUntil, this.opts.disableSince, this.opts.disableWeekends, this.opts.disableDays, this.opts.disableDateRange, this.opts.enableDays);
+        this.disableTodayBtn = this.utilService.isDisabledDay(this.utilService.getToday(), this.opts.disableUntil, this.opts.disableSince, this.opts.disableWeekends, this.opts.disableDays, this.opts.disableDateRange, this.opts.enableDays);
     }
 
     parseOptions(): void {
@@ -394,7 +398,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     }
 
     openBtnClicked(): void {
-        this.infoPanelDay = (this.selectionDayTxt && !this.invalidDate) ? this.utilService.getInfoPanelDay(this.selectedDate) : this.utilService.getInfoPanelDay(this.getToday());
+        this.infoPanelDay = (this.selectionDayTxt && !this.invalidDate) ? this.utilService.getInfoPanelDay(this.selectedDate) : this.utilService.getInfoPanelDay(this.utilService.getToday());
         // Open selector button clicked
         this.showSelector = !this.showSelector;
         if (this.showSelector) {
@@ -411,7 +415,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         let y: number = 0, m: number = 0;
         if (!this.utilService.isInitializedDate(this.selectedDate)) {
             if (this.selectedMonth.year === 0 && this.selectedMonth.monthNbr === 0) {
-                let today: IMyDate = this.getToday();
+                let today: IMyDate = this.utilService.getToday();
                 y = today.year;
                 m = today.month;
             } else {
@@ -467,7 +471,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
     todayClicked(): void {
         // Today button clicked
-        let today: IMyDate = this.getToday();
+        let today: IMyDate = this.utilService.getToday();
         this.selectDate(today);
         if (this.opts.inline && today.year !== this.visibleMonth.year || today.month !== this.visibleMonth.monthNbr) {
             this.visibleMonth = { monthTxt: this.opts.monthFullLabels[today.month], monthNbr: today.month, year: today.year };
@@ -589,11 +593,6 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         return d === today.day && m === today.month && y === today.year && cmo === this.CURR_MONTH;
     }
 
-    getToday(): IMyDate {
-        let date: Date = new Date();
-        return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
-    }
-
     getTimeInMilliseconds(date: IMyDate): number {
         return this.getDate(date.year, date.month, date.day).getTime();
     }
@@ -621,7 +620,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
     generateCalendar(m: number, y: number, notifyChange: boolean): void {
         this.dates.length = 0;
-        let today: IMyDate = this.getToday();
+        let today: IMyDate = this.utilService.getToday();
         let monthStart: number = this.monthStartIdx(y, m);
         let dInThisM: number = this.daysInMonth(m, y);
         let dInPrevM: number = this.daysInPrevMonth(m, y);
@@ -726,9 +725,9 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         this.createYearCalendar(this.visibleMonth.year);
     }
 
-    monthCellClicked(month: IMyMonthMeta, year: number): void {
-        this.visibleMonth = { monthTxt: this.monthFullText(month.monthNbr), monthNbr: month.monthNbr, year: year };
-        this.generateCalendar(month.monthNbr, year, true);
+    monthCellClicked(month: IMyMonth): void {
+        this.visibleMonth = { monthTxt: this.monthFullText(month.monthNbr), monthNbr: month.monthNbr, year: month.year };
+        this.generateCalendar(month.monthNbr, month.year, true);
         this.isYearViewVisible = false;
     }
 
@@ -736,10 +735,11 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         // Clear existing year calendar
         this.years = [];
 
+        this.years.push(year);
         // Create next 5 yearrows
-        // for (let i = this.MIN_YEAR; i <= this.MAX_YEAR; i++) {
-        //     this.years.push(i);
-        // }
+        for (let i = 1; i <= 5; i++) {
+            this.years.push(year + i);
+        }
     }
 
     createYearRow(year: number, keepRowsConstant?: boolean): void {
@@ -763,4 +763,6 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
             this.createYearRow(y, true);
         }
     }
+
+
 }
