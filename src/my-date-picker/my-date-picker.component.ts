@@ -3,6 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IMyDate, IMyDateRange, IMyMonth, IMyCalendarDay, IMyWeek, IMyDayLabels, IMyMonthLabels, IMyOptions, IMyDateModel, IMyInputAutoFill, IMyInputFieldChanged, IMyCalendarViewChanged, IMyInfoPanelDay, IMyMonthMeta, IScrollStat } from "./interfaces/index";
 import { LocaleService } from "./services/my-date-picker.locale.service";
 import { UtilService } from "./services/my-date-picker.util.service";
+import { WindowRef } from "./services/window-ref.service";
 
 // webpack1_
 declare var require: any;
@@ -20,7 +21,7 @@ export const MYDP_VALUE_ACCESSOR: any = {
     selector: "my-date-picker",
     styles: [myDpStyles],
     template: myDpTpl,
-    providers: [LocaleService, UtilService, MYDP_VALUE_ACCESSOR],
+    providers: [LocaleService, UtilService, WindowRef, MYDP_VALUE_ACCESSOR],
     encapsulation: ViewEncapsulation.None
 })
 
@@ -73,12 +74,15 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     MIN_YEAR: number = 1880;
     MAX_YEAR: number = 2130;
 
+    private supportsTouch: boolean = false;
+
     // Custom properties for display datetime panel of Material Design
     infoPanelDay: IMyInfoPanelDay = this.utilService.getInfoPanelDay(this.getToday());
     today: IMyDate = this.getToday();
 
     // Default options
     opts: IMyOptions = {
+        usingNativeDpOnTouchDevices: <boolean>true,
         dayLabels: <IMyDayLabels>{},
         monthLabels: <IMyMonthLabels>{},
         monthFullLabels: <IMyMonthLabels>{},
@@ -123,7 +127,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         ariaLabelNextYear: <string>"Next Year"
     };
 
-    constructor(public elem: ElementRef, private renderer: Renderer, private localeService: LocaleService, private utilService: UtilService) {
+    constructor(public elem: ElementRef, private renderer: Renderer, private localeService: LocaleService, private utilService: UtilService, private windowRef: WindowRef) {
         this.setLocaleOptions();
         renderer.listenGlobal("document", "click", (event: any) => {
             if (this.showSelector && event.target && this.elem.nativeElement !== event.target && !this.elem.nativeElement.contains(event.target)) {
@@ -135,6 +139,11 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
                 this.resetMonthYearEdit();
             }
         });
+
+        let patternReg: RegExp = /(iphone|ipod|ipad|android|iemobile|blackberry|bada)/;
+        let nativeWindow = windowRef.nativeWindow;
+        this.supportsTouch = ("ontouchstart" in nativeWindow) || nativeWindow.navigator.msMaxTouchPoints || patternReg.test(nativeWindow.navigator.userAgent.toLowerCase());
+        console.log(this.supportsTouch);
     }
 
     setLocaleOptions(): void {

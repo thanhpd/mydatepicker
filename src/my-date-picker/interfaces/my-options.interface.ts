@@ -4,6 +4,7 @@ import { IMyDate } from "./my-date.interface";
 import { IMyDateRange } from "./my-date-range.interface";
 
 export interface IMyOptions {
+    usingNativeDpOnTouchDevices?: boolean;
     dayLabels?: IMyDayLabels;
     monthLabels?: IMyMonthLabels;
     monthFullLabels?: IMyMonthLabels;

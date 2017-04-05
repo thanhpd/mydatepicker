@@ -1,10 +1,39 @@
-<div class="mydp" [ngStyle]="{'width': getComponentWidth(), 'border': opts.inline ? 'none' : null}">
+<div class="mydp" [ngStyle]="{'width': getComponentWidth(), 'border': opts.inline ? 'none' : null}" *ngIf="opts.usingNativeDpOnTouchDevices && supportsTouch">
+    <div class="selectiongroup" *ngIf="!opts.inline">
+        <md-input-container *ngIf="opts.showInputField" [ngClass]="{'invaliddate': invalidDate&&opts.indicateInvalidDate}">
+            <input md-input type="date" ngtype="text" [attr.aria-label]="opts.ariaLabelInputField" [attr.maxlength]="opts.dateFormat.length"
+                placeholder="{{placeholder}}" [myinputautofill]="autoFillOpts" [ngStyle]="{'padding-right': selectionDayTxt.length>0&&opts.showClearDateBtn ? '60px' : '30px'}"
+                (keyup)="userDateInput($event)" [(ngModel)]="selectionDayTxt" (blur)="lostFocusInput($event)" [disabled]="opts.componentDisabled"
+                [readonly]="!opts.editableDateField" [required]="opts.inputValueRequired" (click)="handleInputClick($event)"
+                name="dpinput">
+        </md-input-container>
+        <div>
+            <div class="md-input-wrapper">
+                <div class="md-input-table">
+                    <div class="md-input-prefix"></div>
+                    <div class="md-input-infix">
+                        <input type="date" class="md-input-element" [attr.aria-label]="opts.ariaLabelInputField" [attr.maxlength]="opts.dateFormat.length"
+                            placeholder="{{placeholder}}" [disabled]="opts.componentDisabled" [readonly]="!opts.editableDateField"
+                            [required]="opts.inputValueRequired">
+                        <label for=""></label>
+                    </div>
+                    <div class="md-input-suffix"></div>
+                </div>
+                <div class="md-input-underline">
+                    <span class="md-input-ripple"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mydp" [ngStyle]="{'width': getComponentWidth(), 'border': opts.inline ? 'none' : null}" *ngIf="!(opts.usingNativeDpOnTouchDevices && supportsTouch)">
     <div class="selectiongroup" *ngIf="!opts.inline">
         <md-input-container *ngIf="opts.showInputField" [ngClass]="{'invaliddate': invalidDate&&opts.indicateInvalidDate}">
             <input md-input ngtype="text" [attr.aria-label]="opts.ariaLabelInputField" [attr.maxlength]="opts.dateFormat.length" placeholder="{{placeholder}}"
                 [myinputautofill]="autoFillOpts" [ngStyle]="{'padding-right': selectionDayTxt.length>0&&opts.showClearDateBtn ? '60px' : '30px'}"
                 (keyup)="userDateInput($event)" [(ngModel)]="selectionDayTxt" (blur)="lostFocusInput($event)" [disabled]="opts.componentDisabled"
-                [readonly]="!opts.editableDateField" [required]="opts.inputValueRequired" (click)="handleInputClick($event)">
+                [readonly]="!opts.editableDateField" [required]="opts.inputValueRequired" (click)="handleInputClick($event)"
+                name="dpinput">
         </md-input-container>
         <div class="selbtngroup" [style.height]="opts.height">
             <button type="button" type="button" [attr.aria-label]="opts.ariaLabelClearDate" class="btnclear" *ngIf="selectionDayTxt.length>0&&opts.showClearDateBtn"
@@ -37,8 +66,8 @@
                         <td class="month-selector">
                             <div>
                                 <div class="headerbtncell">
-                                    <button type="button" [attr.aria-label]="opts.ariaLabelPrevMonth" class="headerbtn month-navigate" (click)="prevMonth()" [disabled]="prevMonthDisabled"
-                                        [ngClass]="{'headerbtnenabled': !prevMonthDisabled, 'headerbtndisabled': prevMonthDisabled}">
+                                    <button type="button" [attr.aria-label]="opts.ariaLabelPrevMonth" class="headerbtn month-navigate" (click)="prevMonth()"
+                                        [disabled]="prevMonthDisabled" [ngClass]="{'headerbtnenabled': !prevMonthDisabled, 'headerbtndisabled': prevMonthDisabled}">
                                 <svg style="display: inline-block; fill: rgba(0, 0, 0, 0.87); height: 24px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;" viewBox="0 0 24 24"> <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path> </svg>
                             </button>
                                 </div>
@@ -47,8 +76,8 @@
                                         tabindex="{{opts.editableMonthAndYear?'0':'-1'}}" class="month-year-button">{{visibleMonth.monthTxt}} {{visibleMonth.year}}</button>
                                 </div>
                                 <div class="headerbtncell">
-                                    <button type="button" [attr.aria-label]="opts.ariaLabelNextMonth" class="headerbtn month-navigate" (click)="nextMonth()" [disabled]="nextMonthDisabled"
-                                        [ngClass]="{'headerbtnenabled': !nextMonthDisabled, 'headerbtndisabled': nextMonthDisabled}">
+                                    <button type="button" [attr.aria-label]="opts.ariaLabelNextMonth" class="headerbtn month-navigate" (click)="nextMonth()"
+                                        [disabled]="nextMonthDisabled" [ngClass]="{'headerbtnenabled': !nextMonthDisabled, 'headerbtndisabled': nextMonthDisabled}">
                                 <svg style="display: inline-block; fill: rgba(0, 0, 0, 0.87); height: 24px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;" viewBox="0 0 24 24"> <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path> </svg>
                             </button>
                                 </div>
@@ -78,7 +107,7 @@
                 </table>
             </div>
             <div class="yearpicker" [class.active]="isYearViewVisible">
-                <div class="yearpickerwrapper" mydpinfinitescroll (scrollChanged)="onScroll($event)">
+                <div class="yearpickerwrapper" (scrollChanged)="onScroll($event)">
                     <table class="caltable">
                         <tbody role="rowgroup" class="yearrow" *ngFor="let year of years">
                             <tr *ngFor="let i of [1, 2]">
