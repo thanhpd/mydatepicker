@@ -15,3 +15,5 @@ export * from "./my-input-auto-fill.interface";
 export * from "./my-infopanel-day.interface";
 export * from "./my-month-meta.interface";
 export * from "./my-scroll-stat.interface";
+export * from "./my-change-event.interface";
+export * from "./my-item-dimensions.interface";

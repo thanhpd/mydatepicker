@@ -106,7 +106,7 @@
                     </tbody>
                 </table>
             </div>            
-            <year-picker class="yearpicker" [class.active]="isYearViewVisible" [opts]="opts" [selectedDate]="selectedDate" (cellClicked)="monthCellClicked(month)"></year-picker>
+            <year-picker class="yearpicker" [class.active]="isYearViewVisible" [opts]="opts" [selectedDate]="selectedDate" (cellClicked)="monthCellClicked($event)"></year-picker>
         </div>
     </div>
 </div>
