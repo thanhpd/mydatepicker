@@ -597,16 +597,17 @@
   margin: 0 auto;
 }
 
-.mydp .selector-content .yearpickerwrapper {
+.mydp .selector-content yearpicker {
   margin-bottom: 5px;
   height: 352px;
   overflow: hidden;
   overflow-y: auto;
   position: relative;
   -webkit-overflow-scrolling: touch;
+  display: block;
 }
 
-.mydp .selector-content .yearpickerwrapper .scrollable-content {
+.mydp .selector-content .scrollable-content {
   top: 0;
   left: 0;
   width: 100%;
@@ -614,7 +615,7 @@
   position: absolute;
 }
 
-.mydp .selector-content .yearpickerwrapper .total-padding {
+.mydp .selector-content .total-padding {
   width: 1px;
   opacity: 0;
 }
@@ -684,7 +685,7 @@
   display: block;
 }
 
-.mydp .yearpicker .monthcell:hover .monthlbl,
+.mydp .yearpicker .monthcell .monthlbl:hover,
 .mydp .yearpicker .monthcell:focus .monthlbl {
   background-color: #e0e0e0;
 }

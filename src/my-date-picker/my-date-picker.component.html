@@ -105,8 +105,10 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="yearpicker" [class.active]="isYearViewVisible">
+                <yearpicker [opts]="opts" [selectedDate]="selectedDate" (cellClicked)="monthCellClicked($event)"></yearpicker>
             </div>            
-            <year-picker class="yearpicker" [class.active]="isYearViewVisible" [opts]="opts" [selectedDate]="selectedDate" (cellClicked)="monthCellClicked($event)"></year-picker>
         </div>
     </div>
 </div>

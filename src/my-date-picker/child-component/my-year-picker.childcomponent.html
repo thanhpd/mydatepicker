@@ -1,19 +1,17 @@
-<div class="yearpickerwrapper">
-    <div class="total-padding" [style.height]="scrollHeight + 'px'"></div>
-    <div class="scrollable-content" [style.transform]="'translateY(' + topPadding + 'px)'">
-        <table class="caltable">
-            <tbody role="rowgroup" class="yearrow" *ngFor="let year of years">
-                <tr *ngFor="let i of [1, 2]">
-                    <td class="yearlbl" *ngIf="i == 1">{{year}}</td>
-                    <td class="yearlbl" *ngIf="i != 1"></td>
-                    <template ngFor let-month [ngForOf]="monthsInYear" let-index="index">
-                        <td tabindex="-1" role="gridcell" class="monthcell" [ngClass]="{'selected': month.monthNbr===selectedDate.month&&year===selectedDate.year, 'current': month.monthNbr===today.month&&year===today.year}"
-                            (click)="monthCellClicked(month, year);$event.stopPropagation()" *ngIf="index < 6 && i == 1 || index >= 6 && i != 1">
-                            <span class="monthlbl">{{month.monthTxt}}</span>
-                        </td>
-                    </template>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<div class="total-padding" [style.height]="scrollHeight + 'px'"></div>
+<div class="yearpickerwrapper scrollable-content" [style.transform]="'translateY(' + topPadding + 'px)'">
+    <table class="caltable">
+        <tbody role="rowgroup" class="yearrow" *ngFor="let year of scrollYears">
+            <tr *ngFor="let i of [1, 2]">
+                <td class="yearlbl" *ngIf="i == 1">{{year}}</td>
+                <td class="yearlbl" *ngIf="i != 1"></td>
+                <template ngFor let-month [ngForOf]="monthsInYear" let-index="index">
+                    <td tabindex="-1" role="gridcell" class="monthcell" [ngClass]="{'selected': month.monthNbr===selectedDate.month&&year===selectedDate.year, 'current': month.monthNbr===today.month&&year===today.year}"
+                        (click)="monthCellClicked(month, year);$event.stopPropagation()" *ngIf="index < 6 && i == 1 || index >= 6 && i != 1">
+                        <span class="monthlbl">{{month.monthTxt}}</span>
+                    </td>
+                </template>
+            </tr>
+        </tbody>
+    </table>
 </div>
