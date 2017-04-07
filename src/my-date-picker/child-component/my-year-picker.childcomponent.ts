@@ -87,9 +87,6 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
         // Number of items in the visible viewport
         let itemsPerColumn = Math.max(1, Math.floor(viewHeight / childHeight));
 
-        if (!(this.years || []).length) {
-            this.createYearCalendar();
-        }
         let years = this.years || []; // safe fallback to zero-length array
         let yearCount = years.length; // number of years in current model
 
@@ -185,7 +182,7 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
                 let month: IMyMonthMeta = { monthNbr: i, monthTxt: this.opts.monthLabels[i] };
                 this.monthsInYear.push(month);
             }
-            // this.createYearCalendar(y);
+            this.createYearCalendar();
         }
         else {
             this.monthsInYear.forEach((month, index) => {
@@ -201,9 +198,10 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
 
         // Create next 5 yearrows
         for (let i = pivotYear - itemsPerColumn; i <= pivotYear + 2 * itemsPerColumn; i++) {
-            this.years.push(pivotYear + i);
+            this.years.push(i);
         }
         this.scrollIntoYear(pivotYear);
+        console.log(this.years);
     }
 
     private addNewRows(itemsPerColumn: number = 4, isEnd: boolean = true): void {
