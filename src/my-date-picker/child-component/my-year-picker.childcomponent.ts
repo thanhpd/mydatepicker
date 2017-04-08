@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ElementRef, ViewEncapsulation, Renderer, SimpleChanges } from "@angular/core";
+import { Component, Input, Output, OnInit, OnChanges, OnDestroy, AfterViewInit, EventEmitter, ElementRef, ViewEncapsulation, Renderer, SimpleChanges } from "@angular/core";
 import { IMyDate, IMyMonth, IMyOptions, IMyMonthMeta, IChangeEvent, IDimensions } from "../interfaces/index";
 import { UtilService } from "../services/my-date-picker.util.service";
 
@@ -12,7 +12,7 @@ const myYpTpl: string = require("./my-year-picker.childcomponent.html");
     encapsulation: ViewEncapsulation.None
 })
 
-export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
+export class MyYearPicker implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     @Input() opts: IMyOptions;
     @Input() selectedDate: IMyDate;
 
@@ -39,8 +39,11 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
     constructor(public elem: ElementRef, private renderer: Renderer, private utilService: UtilService) { }
 
     ngOnInit() {
-        this.initMonthsInYear();
         this.onScrollListener = this.renderer.listen(this.elem.nativeElement, "scroll", this.refresh.bind(this));
+    }
+
+    ngAfterViewInit() {
+        this.initMonthsInYear();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -65,7 +68,7 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
 
     // Scroll into the specified year
     scrollIntoYear(year: number): void {
-        let index: number = (this.years || []).indexOf(year);
+        let index: number = year - this.opts.minYear;
         if (index < 0 || index >= (this.years || []).length) { return; }
 
         let d = this.calculateDimensions();
@@ -88,7 +91,7 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
         let itemsPerColumn = Math.max(1, Math.floor(viewHeight / childHeight));
 
         let years = this.years || []; // safe fallback to zero-length array
-        let yearCount = years.length; // number of years in current model
+        let yearCount = this.opts.maxYear - this.opts.minYear; // number of years in current model
 
         return {
             yearCount: yearCount,
@@ -114,8 +117,8 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
 
         // Calculate item index based on scroll position
         let indexByScrollTop = el.scrollTop / this.scrollHeight * d.yearCount;
-        console.log(`scrollTop: ${el.scrollTop}`);
-        console.log(`indexByScrollTop: ${indexByScrollTop}`);
+        // console.log(`scrollTop: ${el.scrollTop}`);
+        // console.log(`indexByScrollTop: ${indexByScrollTop}`);
 
         // Start and end index for this version was calculated to be redundant, meaning there are some items that will be populated but won't be visible in the viewport.
         // However, this action helps to avoid display blank row in year selection
@@ -125,7 +128,7 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
         // 1. Total number of year in the model: d.yearCount, this happens when scroll to bottom end
         // 2. Round up of Current scrolling item index (a.k.a first item in the visible viewport) + 2 x no. of items that can be displayed in the visible viewport (this happends when scroll in the middle)
         let end = Math.min(d.yearCount, Math.ceil(indexByScrollTop) + 2 * d.itemsPerColumn);
-        console.log(`end = ${end}, d.yearCount = ${d.yearCount}, Math.ceil(indexByScrollTop) + 2 * d.itemsPerColumn = ${Math.ceil(indexByScrollTop) + 2 * d.itemsPerColumn}`);
+        // console.log(`end = ${end}, d.yearCount = ${d.yearCount}, Math.ceil(indexByScrollTop) + 2 * d.itemsPerColumn = ${Math.ceil(indexByScrollTop) + 2 * d.itemsPerColumn}`);
 
         // Calculate start index for first item in the visible viewport
         // Get the smaller value between:
@@ -133,7 +136,7 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
         // 2. Round down of current scrolling item index * no. of visible items in visible viewport
         let maxStart = Math.max(0, end - 3 * d.itemsPerColumn);
         let start = Math.min(maxStart, Math.floor(indexByScrollTop) * d.itemsPerColumn);
-        console.log(`start = ${start}, maxStart = ${maxStart}, Math.floor(indexByScrollTop) * d.itemsPerColumn = ${Math.floor(indexByScrollTop) * d.itemsPerColumn}`);
+        // console.log(`start = ${start}, maxStart = ${maxStart}, Math.floor(indexByScrollTop) * d.itemsPerColumn = ${Math.floor(indexByScrollTop) * d.itemsPerColumn}`);
 
         // Calculate top padding (for translating absolute position table)
         // This equals multiply between height of each child item and round up value of first visible item in viewport position
@@ -143,8 +146,8 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
 
             if (start !== this.previousStart && !this.startupLoop) {
                 // start event
-                console.log("Start event");
-                console.log(`start: ${start}, end: ${end}`);
+                // console.log("Start event");
+                // console.log(`start: ${start}, end: ${end}`);
                 if (start === 0) {
                     this.addNewRows(4, false);
                 }
@@ -152,8 +155,8 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
 
             if (end !== this.previousEnd && !this.startupLoop) {
                 // end event
-                console.log("End event");
-                console.log(`start: ${start}, end: ${end}`);
+                // console.log("End event");
+                // console.log(`start: ${start}, end: ${end}`);
                 if (end === this.years.length) {
                     this.addNewRows();
                 }
@@ -166,8 +169,8 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
                 this.refresh();
             } else {
                 // change event
-                console.log("Change event");
-                console.log(`start: ${start}, end: ${end}`);
+                // console.log("Change event");
+                // console.log(`start: ${start}, end: ${end}`);
             }
         } else if (this.startupLoop) {
             this.startupLoop = false;
@@ -197,11 +200,11 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy {
         this.years = [];
 
         // Create next 5 yearrows
-        for (let i = pivotYear - itemsPerColumn; i <= pivotYear + 2 * itemsPerColumn; i++) {
+        for (let i = this.opts.minYear; i <= this.opts.maxYear; i++) {
             this.years.push(i);
         }
-        this.scrollIntoYear(pivotYear);
-        console.log(this.years);
+        // this.scrollIntoYear(pivotYear);
+        // console.log(this.years);
     }
 
     private addNewRows(itemsPerColumn: number = 4, isEnd: boolean = true): void {

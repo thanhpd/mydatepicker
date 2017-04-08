@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ElementRef, ViewEncapsulation, Renderer, forwardRef } from "@angular/core";
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ElementRef, ViewEncapsulation, Renderer, forwardRef, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IMyDate, IMyDateRange, IMyMonth, IMyCalendarDay, IMyWeek, IMyDayLabels, IMyMonthLabels, IMyOptions, IMyDateModel, IMyInputAutoFill, IMyInputFieldChanged, IMyCalendarViewChanged, IMyInfoPanelDay, IMyMonthMeta, IScrollStat } from "./interfaces/index";
 import { LocaleService } from "./services/my-date-picker.locale.service";
 import { UtilService } from "./services/my-date-picker.util.service";
 import { WindowRef } from "./services/window-ref.service";
+import { MyYearPicker } from "./child-component/my-year-picker.childcomponent";
 
 // webpack1_
 declare var require: any;
@@ -36,6 +37,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
     @Output() inputFieldChanged: EventEmitter<IMyInputFieldChanged> = new EventEmitter<IMyInputFieldChanged>();
     @Output() calendarViewChanged: EventEmitter<IMyCalendarViewChanged> = new EventEmitter<IMyCalendarViewChanged>();
     @Output() calendarToggle: EventEmitter<number> = new EventEmitter<number>();
+    @ViewChild(MyYearPicker) private yearPicker: MyYearPicker;
 
     onChangeCb: (_: any) => void = () => { };
     onTouchedCb: () => void = () => { };
@@ -147,7 +149,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         let patternReg: RegExp = /(iphone|ipod|ipad|android|iemobile|blackberry|bada)/;
         let nativeWindow = this.windowRef.nativeWindow;
         this.supportsTouch = ("ontouchstart" in nativeWindow) || nativeWindow.navigator.msMaxTouchPoints || patternReg.test(nativeWindow.navigator.userAgent.toLowerCase());
-        console.log(this.supportsTouch);
+        // console.log(this.supportsTouch);
     }
 
     setLocaleOptions(): void {
@@ -722,7 +724,8 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
     openSelectYearMonth(): void {
         this.isYearViewVisible = true;
-        this.createYearCalendar(this.visibleMonth.year);
+        // this.createYearCalendar(this.visibleMonth.year);
+        this.yearPicker.scrollIntoYear(this.visibleMonth.year);
     }
 
     monthCellClicked(month: IMyMonth): void {
