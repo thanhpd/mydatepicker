@@ -39,11 +39,12 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy, AfterViewInit
     constructor(public elem: ElementRef, private renderer: Renderer, private utilService: UtilService) { }
 
     ngOnInit() {
-        this.onScrollListener = this.renderer.listen(this.elem.nativeElement, "scroll", this.refresh.bind(this));
+        // this.onScrollListener = this.renderer.listen(this.elem.nativeElement, "scroll", this.refresh.bind(this));
     }
 
     ngAfterViewInit() {
         this.initMonthsInYear();
+        this.onScrollListener = this.renderer.listen(this.elem.nativeElement, "scroll", this.refresh.bind(this));
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -142,15 +143,15 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy, AfterViewInit
         // This equals multiply between height of each child item and round up value of first visible item in viewport position
         this.topPadding = d.childHeight * Math.ceil(start);
         if (start !== this.previousStart || end !== this.previousEnd) {
-            this.scrollYears = years.slice(start, end);
+            this.scrollYears = this.populateYears(start, end);
 
             if (start !== this.previousStart && !this.startupLoop) {
                 // start event
                 // console.log("Start event");
                 // console.log(`start: ${start}, end: ${end}`);
-                if (start === 0) {
-                    this.addNewRows(4, false);
-                }
+                // if (start === 0) {
+                //     this.addNewRows(4, false);
+                // }
             }
 
             if (end !== this.previousEnd && !this.startupLoop) {
@@ -185,7 +186,7 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy, AfterViewInit
                 let month: IMyMonthMeta = { monthNbr: i, monthTxt: this.opts.monthLabels[i] };
                 this.monthsInYear.push(month);
             }
-            this.createYearCalendar();
+            // this.createYearCalendar();
         }
         else {
             this.monthsInYear.forEach((month, index) => {
@@ -194,17 +195,37 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy, AfterViewInit
         }
     }
 
-    private createYearCalendar(itemsPerColumn: number = 4): void {
-        let pivotYear = this.selectedDate.year ? this.selectedDate.year : this.utilService.getToday().year;
+    createYearCalendar(pivotYear: number): void {
+        let d = this.calculateDimensions();
+
         // Clear existing year calendar
-        this.years = [];
+        this.years = new Array(this.opts.maxYear - this.opts.minYear);
 
         // Create next 5 yearrows
-        for (let i = this.opts.minYear; i <= this.opts.maxYear; i++) {
-            this.years.push(i);
-        }
-        // this.scrollIntoYear(pivotYear);
+        // for (let i = this.opts.minYear; i <= this.opts.maxYear; i++) {
+        //     this.years.push(i);
+        // }
+        this.scrollIntoYear(pivotYear);
         // console.log(this.years);
+    }
+
+    private populateYears(start: number, end: number): Array<number> {
+        if (typeof (this.years[start]) === "undefined" && typeof (this.years[end]) === "undefined") {
+            for (let i = start; i <= end; i++) {
+                if (typeof (this.years[i]) === "undefined") {
+                    this.years[i] = i + this.opts.minYear;
+                    console.log(`init populated ${this.years[i]}`);
+                }
+            }
+        } else if (typeof (this.years[start]) === "undefined") {
+            this.years[start] = start + this.opts.minYear;
+            console.log(`scroll up populated ${this.years[start]}`);
+        } else if (typeof (this.years[end]) === "undefined") {
+            this.years[end] = end + this.opts.minYear;
+            console.log(`scroll down populated ${this.years[end]}`);
+        }
+
+        return this.years.slice(start, end);
     }
 
     private addNewRows(itemsPerColumn: number = 4, isEnd: boolean = true): void {
@@ -227,5 +248,10 @@ export class MyYearPicker implements OnInit, OnChanges, OnDestroy, AfterViewInit
     // Emit event to parent component when a month in a year is selected
     private monthCellClicked(month: IMyMonthMeta, year: number): void {
         this.cellClicked.emit({ monthNbr: month.monthNbr, monthTxt: month.monthTxt, year: year });
+    }
+
+    // Return aria label for each td
+    private getMonthYearDescription(monthIndex: number, year: number) {
+        return `${this.opts.monthFullLabels[monthIndex + 1]} ${year}`;
     }
 }

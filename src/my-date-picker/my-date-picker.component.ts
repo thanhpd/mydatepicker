@@ -157,7 +157,8 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         Object.keys(opts).forEach((k) => {
             (<IMyOptions>this.opts)[k] = opts[k];
         });
-        this.initMonthsInYear();
+        // this.initMonthsInYear();
+        // TODO: Update locale for child component
     }
 
     setOptions(): void {
@@ -175,24 +176,24 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
         let separator: string = this.utilService.getDateFormatSeparator(this.opts.dateFormat);
         this.autoFillOpts = { separator: separator, formatParts: this.opts.dateFormat.split(separator), enabled: this.opts.inputAutoFill };
-        this.initMonthsInYear();
+        // this.initMonthsInYear();
+        // TODO: Update locale for child component
     }
 
-    initMonthsInYear(): void {
-        if (this.monthsInYear.length === 0) {
-            let y = this.selectedDate.year ? this.selectedDate.year : this.utilService.getToday().year;
-            for (let i = 1; i <= 12; i++) {
-                let month: IMyMonthMeta = { monthNbr: i, monthTxt: this.opts.monthLabels[i] };
-                this.monthsInYear.push(month);
-            }
-            this.createYearCalendar(y);
-        }
-        else {
-            this.monthsInYear.forEach((month, index) => {
-                month.monthTxt = this.opts.monthLabels[index + 1];
-            });
-        }
-    }
+    // initMonthsInYear(): void {
+    //     if (this.monthsInYear.length === 0) {
+    //         let y = this.selectedDate.year ? this.selectedDate.year : this.utilService.getToday().year;
+    //         for (let i = 1; i <= 12; i++) {
+    //             let month: IMyMonthMeta = { monthNbr: i, monthTxt: this.opts.monthLabels[i] };
+    //             this.monthsInYear.push(month);
+    //         }
+    //     }
+    //     else {
+    //         this.monthsInYear.forEach((month, index) => {
+    //             month.monthTxt = this.opts.monthLabels[index + 1];
+    //         });
+    //     }
+    // }
 
     getComponentWidth(): string {
         if (this.opts.showInputField) {
@@ -724,8 +725,7 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
 
     openSelectYearMonth(): void {
         this.isYearViewVisible = true;
-        // this.createYearCalendar(this.visibleMonth.year);
-        this.yearPicker.scrollIntoYear(this.visibleMonth.year);
+        this.yearPicker.createYearCalendar(this.visibleMonth.year);
     }
 
     monthCellClicked(month: IMyMonth): void {
@@ -733,39 +733,4 @@ export class MyDatePicker implements OnChanges, ControlValueAccessor {
         this.generateCalendar(month.monthNbr, month.year, true);
         this.isYearViewVisible = false;
     }
-
-    createYearCalendar(year: number): void {
-        // Clear existing year calendar
-        this.years = [];
-
-        this.years.push(year);
-        // Create next 5 yearrows
-        for (let i = 1; i <= 5; i++) {
-            this.years.push(year + i);
-        }
-    }
-
-    createYearRow(year: number, keepRowsConstant?: boolean): void {
-        // Append the new row at start or end of array depends on if the new row year is earlier or later than the first element of array
-        if (this.years.length === 0 || this.years.length > 0 && this.years[this.years.length - 1] < year) {
-            this.years.push(year);
-            // if (keepRowsConstant) {
-            //     setTimeout(() => this.years.shift(), 500);
-            // }
-        } else if (this.years.length > 0 && this.years[0] > year) {
-            this.years.unshift(year);
-            // if (keepRowsConstant) {
-            //     setTimeout(() => this.years.pop(), 500);
-            // }
-        }
-    }
-
-    onScroll(stat: IScrollStat): void {
-        for (let i = 0; i < stat.addedRows; i++) {
-            let y: number = stat.isScrollDown ? this.years[this.years.length - 1] + 1 : this.years[0] - 1;
-            this.createYearRow(y, true);
-        }
-    }
-
-
 }
